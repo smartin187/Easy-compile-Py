@@ -9,6 +9,8 @@ from tkinter import ttk
 
 import sys
 
+import subprocess
+
 os_name = sys.platform
 
 class Trad:
@@ -51,6 +53,14 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
     """
     def configure_frame_windows(frame):
         """Make the frame of the compile for window."""
+        def compile_windows():
+            """Lauche the compile for windows"""
+            subprocess.run(
+                    ["pyinstaller", str(file)],
+                    shell=True,
+                    text=True,
+                )
+
         frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
 
         text_info_compiling = tk.Label(frame_type_compiling, text=Trad.t001[language])
@@ -73,7 +83,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
         frame_compile = tk.LabelFrame(frame, text=Trad.t005[language])
 
-        button_compile = tk.Button(frame_compile, text=Trad.t005[language], font=("Arial", 25))
+        button_compile = tk.Button(frame_compile, text=Trad.t005[language], command=compile_windows, font=("Arial", 25))
         button_compile.pack()
 
         frame_compile.pack()
