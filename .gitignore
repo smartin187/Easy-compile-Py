@@ -4,3 +4,11 @@ __pycache__/**
 *$py.class
 
 **/*.pyc
+
+dist/**
+
+build/**
+
+*.spec
+
+teste.py
