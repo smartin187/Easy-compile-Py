@@ -22,12 +22,14 @@ main_window.title(trad_002[language])
 
 def open():
     """Open a file and open the window for compile"""
-    file = filedialog.askopenfile(
-                                title=trad_001[language],
-                                filetypes=[(trad_003[language], "*.py")]
+    file = filedialog.askopenfilename(
+                                    title=trad_001[language],
+                                    filetypes=[(trad_003[language], "*.py")]
         )
+
     
-    if file != "":    
+    if file != "":
+
         main_window.withdraw()
         easyCompile(main_window, file, language)
         main_window.destroy()
