@@ -69,9 +69,27 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
             "fr":"Désolé, une erreur est arrivé lors de la compilation...",
             "en":"Sorry, an error occurred during compilation..."
         }
+
+        t010 = {
+            "fr":"Détail",
+            "en":"Detail"
+        }
     
     def window_error(window, title, text, detail):
         """Open a window error."""
+        window_e = tk.Toplevel(window)
+        window_e.title(title)
+        
+        text_error = tk.Label(window_e, text=text).pack()
+
+        frame_detail = tk.LabelFrame(window_e, text=Trad.t010[language])
+
+        text_detail = tk.Label(frame_detail, text=detail).pack()
+
+        frame_detail.pack()
+
+        window_e.grab_set()
+        window_e.wait_window()
 
     def compile_message():
         """Set a message one the window of easyCompile for anounce the compile.
