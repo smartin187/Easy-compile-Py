@@ -11,6 +11,8 @@ import sys
 
 import subprocess
 
+import webbrowser
+
 os_name = sys.platform
 
 def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
@@ -74,6 +76,51 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
             "fr":"Détail",
             "en":"Detail"
         }
+
+        t011 = {
+            "fr":"Dépandance manquante",
+            "en":"Missing depandance"
+        }
+
+        t012 = {
+            "fr":"Easy Compile a besouin de Pyinstaller pour compiler.\nPyinstaller n'est pas installer sur votre ordinateur.",
+            "en":"Easy Compile needs Pyinstaller to compile.\nPyinstaller is not installed on your computer."
+        }
+
+        t013 = {
+            "fr":"Intalation automatique",
+            "en":"Automatic installation"
+        }
+
+        t014 = {
+            "fr":"L'instalation de pyinstaller a étais réaliser avec succé.\n Vous devez redémarer Easy Compile pour appliquer l'instalation...",
+            "en":"The installation of pyinstaller was successful.\n You must restart Easy Compile to apply the installation..."
+        }
+
+        t015 = {
+            "fr":"OK",
+            "en":"OK"
+        }
+
+        t016 = {
+            "fr":"Erreur d'instalation",
+            "en":"Installation error"
+        }
+
+        t017 = {
+            "fr":"Impossible d'instaler pyinstaller automatiquement. Vous pouvez esseyer la commande dans un terminal :\npip install pyinstaller\n\nVérifier aussi que pip est bien installer.\nSi pip n'est pas installer, vous pouvez cliquer sur 'Téléchager Python'.\n\nEasy Compile va être fermer...",
+            "en":"Unable to automatically install pyinstaller. You can try the command in a terminal:\npip install pyinstaller\n\nAlso check that pip is installed.\nIf pip is not installed, you can click on 'Download Python'.\n\nEasy Compile will be closed..."
+        }
+
+        t018 = {
+            "fr":"Téléchager Python",
+            "en":"Download Python"
+        }
+
+        t019 = {
+            "fr":"Fermer",
+            "en":"Close"
+        }
     
     def window_error(window, title, text, detail):
         """Open a window error."""
@@ -90,7 +137,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
         window_e.grab_set()
         window_e.wait_window()
-
+    
     def compile_message():
         """Set a message one the window of easyCompile for anounce the compile.
         return the frame of message"""
@@ -212,7 +259,74 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
     
     window_easy_compile.geometry("300x300")
 
-    window_easy_compile.grab_set()
-    window_easy_compile.wait_window()
+    # controle de Pyinstaller :
+    try:
+        import PyInstaller
+    except ImportError:
+        def automatic_installe():
+            """Try to install PyInstaller."""
+            def error_install(détail):
+                """Open an error window for an error of automatic install."""
+                window_error_install = tk.Toplevel(window_no_pyinstaller)
+                window_error_install.title(Trad.t016[language])
+
+                text_error_install = tk.Label(window_error_install, text=Trad.t017[language]).pack()
+                text_detail = tk.Label(window_error_install, text=Trad.t010[language] + détail).pack()
+
+                frame_button_error = tk.Frame(window_error_install)
+
+                button_python = tk.Button(frame_button_error, text=Trad.t018[language], command=lambda: webbrowser.open("https://www.python.org/downloads/")).grid(column=0, row=0)
+                button_close = tk.Button(frame_button_error, text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+                frame_button_error.pack()
+
+                window_error_install.grab_set()
+                window_error_install.wait_window()
+
+            try:
+                result = subprocess.run(
+                        [sys.executable, "-m", "pip", "install", "pyinstaller"],
+                        capture_output=True,
+                        text=True,
+                        timeout=60
+                    )
+                if result.returncode == 0:
+                    window_pyinstaller_install = tk.Toplevel(window_no_pyinstaller)
+
+                    texte_info = tk.Label(window_pyinstaller_install, text=Trad.t014[language]).pack()
+
+                    button_ok = tk.Button(window_pyinstaller_install, text=Trad.t015[language], command=window_easy_compile.destroy).pack()
+
+                    window_pyinstaller_install.protocol("WM_DELETE_WINDOW", window_easy_compile.destroy)
+
+                    window_pyinstaller_install.grab_set()
+                    window_pyinstaller_install.wait_window()
+                else:
+                    error_install("returncode" + str(result.returncode))
+            except Exception as e:
+                error_install(str(e))
+                
+
+        window_no_pyinstaller = tk.Toplevel(window_easy_compile)
+        window_no_pyinstaller.title(Trad.t011[language])
+
+        text_no_pyinstaller = tk.Label(window_no_pyinstaller, text=Trad.t012[language]).pack()
+
+        frame_button = tk.Frame(window_no_pyinstaller)
+
+        button_automatic_installe = tk.Button(frame_button, text=Trad.t013[language], command=automatic_installe).grid(column=0, row=0)
+
+        frame_button.pack()
+
+        window_no_pyinstaller.protocol("WM_DELETE_WINDOW", window_easy_compile.destroy)
+
+        window_no_pyinstaller.grab_set()
+        window_no_pyinstaller.wait_window()
+
+    try:
+        window_easy_compile.grab_set()
+        window_easy_compile.wait_window()
+    except:
+        pass
 
     
