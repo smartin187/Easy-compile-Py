@@ -54,16 +54,45 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
             "fr":"Compilation en cours,\nVeuiller patienter...",
             "en":"Compiling in progress,\nPlease wait..."
         }
+
+        t007 = {
+            "fr":"Ne fermer pas cette fênetre.",
+            "en":"Do not close this window."
+        }
+
+        t008 = {
+            "fr":"Erreur de compilation",
+            "en":"Compilation error"
+        }
+
+        t009 = {
+            "fr":"Désolé, une erreur est arrivé lors de la compilation...",
+            "en":"Sorry, an error occurred during compilation..."
+        }
     
+    def window_error(window, title, text, detail):
+        """Open a window error."""
+
     def compile_message():
         """Set a message one the window of easyCompile for anounce the compile.
         return the frame of message"""
 
-        frame_message = tk.LabelFrame(window_easy_compile)      # a terminer
+        back_ground = "#FFFFFF"
 
-        text_info = tk.Label(frame_message, text=Trad.t006[language]).pack()
+        frame_message = tk.LabelFrame(window_easy_compile, bg=back_ground)
 
-        frame_message.place(x=main_frame.winfo_width()//2, y=main_frame.winfo_height()//2, height=200, width=200)
+        text_info = tk.Label(frame_message, text=Trad.t006[language], bg=back_ground).pack()
+        text_warning = tk.Label(frame_message, text=Trad.t007[language], bg=back_ground, fg="#FF0000", font=("Arial", 8, "bold")).pack()
+
+        height=60
+        width=200
+
+        frame_message.place(
+                            x=main_frame.winfo_width() // 2 - width // 2,
+                            y=main_frame.winfo_height() // 2 - height // 2,
+                            height=height,
+                            width=width
+                        )
 
         return frame_message
 
@@ -96,11 +125,15 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
                 window_easy_compile.update()
 
-                subprocess.run(
-                        ["pyinstaller", str(file)],
-                        shell=True,
-                        text=True,
-                    )
+                try:
+                    subprocess.run(
+                            ["pyinstaller", str(file)],
+                            shell=True,
+                            text=True,
+                        )
+                
+                except Exception as e:
+                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
                 
                 frame_message.destroy()
                 
