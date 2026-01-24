@@ -13,42 +13,6 @@ import subprocess
 
 os_name = sys.platform
 
-class Trad:
-    """The traduction for easyCompile.
-    Example : {"fr":"aa", "en":"aa"}
-    """
-
-    t001 = {
-        "fr":"Choisiser le type de compilation pour Window :",
-        "en":"Select the type of compiling for Window:"
-    }
-
-    t002 = {
-        "fr":"Type de compilation",
-        "en":"Compiling type"
-    }
-
-    t003 = {
-        "fr":"Configuration",
-        "en":"Configure"
-    }
-
-    t004 = {
-        "fr":"Aucun paramètre...",
-        "en":"No configure..."
-    }
-
-    t005 = {
-        "fr":"Compiler",
-        "en":"Compile"
-    }
-
-    t006 = {
-        "fr":"Compilation en cours,\nVeuiller patienter...",
-        "en":"Compiling in progress,\nPlease wait..."
-    }
-
-
 def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
     """Open an window for compile Python with GUI.
     Argument :
@@ -56,6 +20,41 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
     * file : the file of scrip python
     * title : the title of windows. Defaut is "Easy compile Py".
     """
+    class Trad:
+        """The traduction for easyCompile.
+        Example : {"fr":"aa", "en":"aa"}
+        """
+
+        t001 = {
+            "fr":"Choisiser le type de compilation pour Window :",
+            "en":"Select the type of compiling for Window:"
+        }
+
+        t002 = {
+            "fr":"Type de compilation",
+            "en":"Compiling type"
+        }
+
+        t003 = {
+            "fr":"Configuration",
+            "en":"Configure"
+        }
+
+        t004 = {
+            "fr":"Aucun paramètre...",
+            "en":"No configure..."
+        }
+
+        t005 = {
+            "fr":"Compiler",
+            "en":"Compile"
+        }
+
+        t006 = {
+            "fr":"Compilation en cours,\nVeuiller patienter...",
+            "en":"Compiling in progress,\nPlease wait..."
+        }
+    
     def compile_message():
         """Set a message one the window of easyCompile for anounce the compile.
         return the frame of message"""
