@@ -349,7 +349,12 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         frame_compile.pack()
 
     text_type_of_compile = {
-        "exe":"Windows Executable | *.exe"
+                                            # Window :
+        "exe":"Windows Executable | *.exe",
+                                            # Linux :
+        "bin":"Linux Binary Executable | *",
+        "deb": "Debian Package | *.deb",
+        "appimage": "AppImage Executable | *.AppImage"
     }
 
     if window is None:
