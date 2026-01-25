@@ -115,8 +115,8 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
         }
 
         t017 = {
-            "fr":"Impossible d'instaler pyinstaller automatiquement. Vous pouvez esseyer la commande dans un terminal :\npip install pyinstaller\n\nVérifier aussi que pip est bien installer.\nSi pip n'est pas installer, vous pouvez cliquer sur 'Téléchager Python'.\n\nEasy Compile va être fermer...",
-            "en":"Unable to automatically install pyinstaller. You can try the command in a terminal:\npip install pyinstaller\n\nAlso check that pip is installed.\nIf pip is not installed, you can click on 'Download Python'.\n\nEasy Compile will be closed..."
+            "fr":"Impossible d'instaler pyinstaller automatiquement. Vous pouvez esseyer la commande dans un terminal :\npip install pyinstaller\n\nVérifier aussi que pip est bien installer.\n\nEasy Compile va être fermer...",
+            "en":"Unable to automatically install pyinstaller. You can try the command in a terminal:\npip install pyinstaller\n\nAlso check that pip is installed.\n\nEasy Compile will be closed..."
         }
 
         t018 = {
@@ -140,8 +140,8 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
         }
 
         t022 = {
-            "fr":"(Étape à suivre si pip n'est pas installer)\nTélécharger Python, et vérifier que pip s'installe correctement.",
-            "en":"(Step to follow if pip is not installed)\nDownload Python, and make sure pip is installed correctly."
+            "fr":"(Étape à suivre si pip n'est pas installer)\nTélécharger pip, et vérifier que pip s'installe correctement.",
+            "en":"(Step to follow if pip is not installed)\nDownload pip, and make sure pip is installed correctly."
         }
 
         t023 = {
@@ -310,7 +310,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
                 frame_button_error = tk.Frame(window_error_install)
 
-                button_python = tk.Button(frame_button_error, text=Trad.t018[language], command=open_python_on_webbrowser).grid(column=0, row=0)
+                #button_python = tk.Button(frame_button_error, text=Trad.t018[language], command=open_python_on_webbrowser).grid(column=0, row=0)
                 button_close = tk.Button(frame_button_error, text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
                 frame_button_error.pack()
@@ -354,7 +354,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
             text_install_2 = tk.Label(frame_install_1, text=Trad.t022[language]).pack()
 
-            button_install_python = tk.Button(frame_install_1, text=Trad.t018[language], command=open_python_on_webbrowser).pack()
+            #button_install_python = tk.Button(frame_install_1, text=Trad.t018[language], command=open_python_on_webbrowser).pack()
 
             frame_install_1.pack()
 
