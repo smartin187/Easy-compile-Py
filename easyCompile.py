@@ -20,7 +20,7 @@ import os
 
 os_name = sys.platform
 
-def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
+def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py"):
     """Open an window for compile Python with GUI.
     Argument :
     * window : the Tkinter window
