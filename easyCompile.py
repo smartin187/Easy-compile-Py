@@ -26,6 +26,13 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
         """The traduction for easyCompile.
         Example : {"fr":"aa", "en":"aa"}
         """
+        def t999(nuber):
+            """Special trad"""
+            nuber = str(nuber)
+            return {
+                    "fr":f"Étape {nuber}",
+                    "en":f"Step {nuber}"
+                }
 
         t001 = {
             "fr":"Choisiser le type de compilation pour Window :",
@@ -121,6 +128,34 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
             "fr":"Fermer",
             "en":"Close"
         }
+
+        t020 = {
+            "fr":"Instalation manuelle",
+            "en":"Manuel install"
+        }
+
+        t021 = {
+            "fr":"Suiver les étapes suivante pour installer manuellement Pyinstaller :",
+            "en":"Follow the next steps to manually install Pyinstaller:"
+        }
+
+        t022 = {
+            "fr":"(Étape à suivre si pip n'est pas installer)\nTélécharger Python, et vérifier que pip s'installe correctement.",
+            "en":"(Step to follow if pip is not installed)\nDownload Python, and make sure pip is installed correctly."
+        }
+
+        t023 = {
+            "fr":"Dans un terminal, écriver la commande :\npip install pyinstaller",
+            "en":"In a terminal, write the command:\npip install pyinstaller"
+        }
+
+        t024 = {
+            "fr":"Redémarer Easy Compile...",
+            "en":"Restart Easy Compile..."
+        }
+    
+    def open_python_on_webbrowser():
+        webbrowser.open("https://www.python.org/downloads/")
     
     def window_error(window, title, text, detail):
         """Open a window error."""
@@ -261,7 +296,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
     # controle de Pyinstaller :
     try:
-        import PyInstaller
+        import PyInstaller      # changer l'import
     except ImportError:
         def automatic_installe():
             """Try to install PyInstaller."""
@@ -275,7 +310,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
                 frame_button_error = tk.Frame(window_error_install)
 
-                button_python = tk.Button(frame_button_error, text=Trad.t018[language], command=lambda: webbrowser.open("https://www.python.org/downloads/")).grid(column=0, row=0)
+                button_python = tk.Button(frame_button_error, text=Trad.t018[language], command=open_python_on_webbrowser).grid(column=0, row=0)
                 button_close = tk.Button(frame_button_error, text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
                 frame_button_error.pack()
@@ -285,7 +320,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
             try:
                 result = subprocess.run(
-                        [sys.executable, "-m", "pip", "install", "pyinstaller"],
+                        [sys.executable, "-m", "pip", "install", "pyinstaller"],        # remplacer executable par 'python' ?
                         capture_output=True,
                         text=True,
                         timeout=60
@@ -305,7 +340,43 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
                     error_install("returncode" + str(result.returncode))
             except Exception as e:
                 error_install(str(e))
-                
+
+        def manual_install():
+            """Open an window for an manual install."""
+            window_no_pyinstaller.destroy()
+
+            window_manual_install = tk.Toplevel(window_easy_compile)
+            window_manual_install.title(Trad.t020[language])
+
+            text_install_1 = tk.Label(window_manual_install, text=Trad.t021[language]).pack()
+
+            frame_install_1 = tk.LabelFrame(window_manual_install, text=Trad.t999(1)[language])
+
+            text_install_2 = tk.Label(frame_install_1, text=Trad.t022[language]).pack()
+
+            button_install_python = tk.Button(frame_install_1, text=Trad.t018[language], command=open_python_on_webbrowser).pack()
+
+            frame_install_1.pack()
+
+            frame_install_2 = tk.LabelFrame(window_manual_install, text=Trad.t999(2)[language])
+
+            text_install_3 = tk.Label(frame_install_2, text=Trad.t023[language]).pack()
+
+            frame_install_2.pack()
+
+            frame_install_3 = tk.LabelFrame(window_manual_install, text=Trad.t999(3)[language])
+
+            text_install_4 = tk.Label(frame_install_3, text=Trad.t024[language]).pack()
+
+            frame_install_3.pack()
+
+            button_close = tk.Button(window_manual_install, text=Trad.t019[language], command=window_manual_install.destroy).pack()
+
+            window_manual_install.grab_set()
+            window_manual_install.wait_window()
+
+            window_easy_compile.destroy()
+
 
         window_no_pyinstaller = tk.Toplevel(window_easy_compile)
         window_no_pyinstaller.title(Trad.t011[language])
@@ -315,6 +386,10 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
         frame_button = tk.Frame(window_no_pyinstaller)
 
         button_automatic_installe = tk.Button(frame_button, text=Trad.t013[language], command=automatic_installe).grid(column=0, row=0)
+
+        button_manual_intall = tk.Button(frame_button, text=Trad.t020[language], command=manual_install).grid(column=1, row=0)
+
+        button_close = tk.Button(frame_button, text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=2, row=0)
 
         frame_button.pack()
 
