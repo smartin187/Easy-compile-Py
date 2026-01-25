@@ -6,12 +6,17 @@ This module have the fonction "easyCompile", for easy compile Python.
 
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 
 import sys
 
 import subprocess
 
 import webbrowser
+
+import shutil
+
+import os
 
 os_name = sys.platform
 
@@ -153,7 +158,51 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
             "fr":"Redémarer Easy Compile...",
             "en":"Restart Easy Compile..."
         }
+
+        t025 = {
+            "fr":"Comliation terminer",
+            "en":"Build complete"
+        }
+
+        t026 = {
+            "fr":"La compilation est terminer.",
+            "en":"The compilation is complete."
+        }
+
+        t027 = {
+            "fr":"Enregistrer sous",
+            "en":"Save as"
+        }
+        
+        t028 = {
+            "fr":"Annuler",
+            "en":"Cancel"
+        }
+
+        t029 = {
+            "fr":"Enregistrer l'éxécutable",
+            "en":"Save the executable"
+        }
     
+    def save_compile():
+        """Save the compile (copy the executable)"""
+        # get the executable file :
+        source_file = os.path.abspath(file)
+        parent_dir = os.path.dirname(source_file)
+        file_name = os.path.splitext(os.path.basename(source_file))[0]
+        executable_file = os.path.join(parent_dir, "dist", file_name + ".exe")
+
+        new_executable_file = filedialog.asksaveasfilename(
+                                                            title=Trad.t029[language],
+                                                            filetypes=[(text_type_of_compile["exe"], "*.exe")],
+                                                            defaultextension="*.exe"
+                                                        )
+        
+        if new_executable_file != "":
+            shutil.move(executable_file, new_executable_file)
+
+            window_easy_compile.destroy()
+
     def open_python_on_webbrowser():
         webbrowser.open("https://www.python.org/downloads/")
     
@@ -223,6 +272,8 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
                 frame_message = compile_message()
 
+                compile_ok = False
+
                 window_easy_compile.update()
 
                 try:
@@ -236,13 +287,41 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
                             str(file),
                             "--onefile",
                         ])
+                    
+                    window_easy_compile.update()
+                    
+                    compile_ok = True
                 
                 except Exception as e:
                     window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+
+                    window_easy_compile.update()
+                    compile_ok = False
                 
-                frame_message.destroy()
+                if compile_ok :
+                    window_end_compile = tk.Toplevel(window_easy_compile)
+                    window_end_compile.title(Trad.t025[language])
+
+                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                    frame_button_compile = tk.Frame(window_end_compile)
+
+                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+
+                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+
+                    frame_button_compile.pack()
+
+                    window_end_compile.grab_set()
+                    window_end_compile.wait_window()
+
+                try:
+                    frame_message.destroy()
                 
-                disabeled_window(window_easy_compile, "normal")
+                    disabeled_window(window_easy_compile, "normal")
+                except:
+                    pass
 
         frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
 
