@@ -226,11 +226,16 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
                 window_easy_compile.update()
 
                 try:
-                    subprocess.run(
-                            ["pyinstaller", str(file)],
-                            shell=True,
-                            text=True,
-                        )
+                    # old :
+                    #subprocess.run(
+                    #        ["pyinstaller", str(file)],
+                    #        shell=True,
+                    #        text=True,
+                    #    )
+                    PyInstaller.__main__.run([
+                            str(file),
+                            "--onefile",
+                        ])
                 
                 except Exception as e:
                     window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
@@ -296,7 +301,7 @@ def easyCompile(window=None, file=None, language="en", title="Easy compile Py"):
 
     # controle de Pyinstaller :
     try:
-        import PyInstaller      # changer l'import
+        import PyInstaller.__main__
     except ImportError:
         def automatic_installe():
             """Try to install PyInstaller."""
