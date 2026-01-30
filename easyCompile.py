@@ -277,16 +277,16 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
                 window_easy_compile.update()
 
                 try:
+                    subprocess.run(
+                            ["pyinstaller", str(file), "--onefile"],
+                            shell=True,
+                            text=True,
+                        )
                     # old :
-                    #subprocess.run(
-                    #        ["pyinstaller", str(file)],
-                    #        shell=True,
-                    #        text=True,
-                    #    )
-                    PyInstaller.__main__.run([
+                    """PyInstaller.__main__.run([
                             str(file),
                             "--onefile",
-                        ])
+                        ])"""
                     
                     window_easy_compile.update()
                     
@@ -409,7 +409,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
             try:
                 result = subprocess.run(
-                        [sys.executable, "-m", "pip", "install", "pyinstaller"],        # remplacer executable par 'python' ?
+                        ["python", "-m", "pip", "install", "pyinstaller"],
                         capture_output=True,
                         text=True,
                         timeout=60
