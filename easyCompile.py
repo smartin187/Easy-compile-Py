@@ -279,7 +279,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
                 try:
                     subprocess.run(
                             ["pyinstaller", str(file), "--onefile"],
-                            shell=True,
+                            #shell=True,
                             text=True,
                         )
                     # old :
@@ -347,6 +347,94 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         button_compile.pack()
 
         frame_compile.pack()
+    
+    def configure_frame_Linux(frame):
+        """Make the frame of the compile for Linux."""
+        def compile_Linux():
+            """Lauche the compile for Linux"""
+            compile_type = list_compiling.get()
+
+            if compile_type == text_type_of_compile["bin"]:
+                disabeled_window(window_easy_compile, "disabled")
+
+                frame_message = compile_message()
+
+                compile_ok = False
+
+                window_easy_compile.update()
+
+                try:
+                    print("file : ", str(file))
+                    subprocess.run(
+                            ["pyinstaller", str(file), "--onefile"],
+                            #shell=True,
+                            text=True,
+                        )
+                    # old :
+                    """PyInstaller.__main__.run([
+                            str(file),
+                            "--onefile",
+                        ])"""
+                    
+                    window_easy_compile.update()
+                    
+                    compile_ok = True
+                
+                except Exception as e:
+                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+
+                    window_easy_compile.update()
+                    compile_ok = False
+                
+                if compile_ok :
+                    window_end_compile = tk.Toplevel(window_easy_compile)
+                    window_end_compile.title(Trad.t025[language])
+
+                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                    frame_button_compile = tk.Frame(window_end_compile)
+
+                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+
+                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+
+                    frame_button_compile.pack()
+
+                    window_end_compile.grab_set()
+                    window_end_compile.wait_window()
+
+                try:
+                    frame_message.destroy()
+                
+                    disabeled_window(window_easy_compile, "normal")
+                except:
+                    pass
+
+        frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
+
+        text_info_compiling = tk.Label(frame_type_compiling, text=Trad.t001[language])
+        text_info_compiling.pack()
+
+        list_compiling = ttk.Combobox(frame_type_compiling, values=[text_type_of_compile["bin"]], state="readonly", width=25)
+        list_compiling.current(0)
+        list_compiling.pack()
+
+        frame_type_compiling.pack()
+
+        frame_config_compile = tk.LabelFrame(frame, text=Trad.t003[language])
+
+        texte_config = tk.Label(frame_config_compile, text=Trad.t004[language])
+        texte_config.pack()
+
+        frame_config_compile.pack()
+
+        frame_compile = tk.LabelFrame(frame, text=Trad.t005[language])
+
+        button_compile = tk.Button(frame_compile, text=Trad.t005[language], command=compile_Linux, font=("Arial", 25))
+        button_compile.pack()
+
+        frame_compile.pack()
 
     text_type_of_compile = {
                                             # Window :
@@ -376,10 +464,12 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
     compile_notebok.add(frame_compile_Window, text="Window", state="normal" if os_name == "win32" else "disabled")
 
     configure_frame_windows(frame_compile_Window)
-    
+
     # Linux :
     frame_compile_Linux = tk.Frame(compile_notebok)
     compile_notebok.add(frame_compile_Linux, text="Linux", state="normal" if os_name == "linux" else "disabled")
+
+    configure_frame_Linux(frame_compile_Linux)
     
     window_easy_compile.geometry("300x300")
 
