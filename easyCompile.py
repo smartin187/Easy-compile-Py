@@ -184,24 +184,32 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en":"Save the executable"
         }
     
-    def save_compile():
+    def save_compile(extention_compile_save=".exe"):
         """Save the compile (copy the executable)"""
+
         # get the executable file :
         source_file = os.path.abspath(file)
         parent_dir = os.path.dirname(source_file)
         file_name = os.path.splitext(os.path.basename(source_file))[0]
-        executable_file = os.path.join(parent_dir, "dist", file_name + ".exe")
+        executable_file = os.path.join(parent_dir, "dist", file_name + extention_compile_save)
 
+        
         new_executable_file = filedialog.asksaveasfilename(
                                                             title=Trad.t029[language],
-                                                            filetypes=[(text_type_of_compile["exe"], "*.exe")],
-                                                            defaultextension="*.exe"
+                                                            filetypes=[(text_type_of_compile["exe" if extention_compile_save==".exe" else "bin"], "*" + extention_compile_save)],
+                                                            defaultextension="*" + extention_compile_save
                                                         )
         
+        if isinstance(new_executable_file, tuple):
+            new_executable_file = new_executable_file[0] if new_executable_file else ""
+
         if new_executable_file != "":
             shutil.move(executable_file, new_executable_file)
 
+            print("fichier déplacer : " + new_executable_file)
+
             window_easy_compile.destroy()
+
 
     def open_python_on_webbrowser():
         webbrowser.open("https://www.python.org/downloads/")
@@ -394,7 +402,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
                     frame_button_compile = tk.Frame(window_end_compile)
 
-                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile("")).grid(column=0, row=0)
 
                     button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
