@@ -197,7 +197,6 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         new_executable_file = filedialog.asksaveasfilename(
                                                             title=Trad.t029[language],
                                                             filetypes=[(text_type_of_compile["exe" if extention_compile_save==".exe" else "bin"], "*" + extention_compile_save)],
-                                                            defaultextension="*" + extention_compile_save
                                                         )
         
         if isinstance(new_executable_file, tuple):
@@ -205,8 +204,6 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         if new_executable_file != "":
             shutil.move(executable_file, new_executable_file)
-
-            print("fichier déplacer : " + new_executable_file)
 
             window_easy_compile.destroy()
 
