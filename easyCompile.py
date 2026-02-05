@@ -7,6 +7,7 @@ This module have the fonction "easyCompile", for easy compile Python.
 import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
+from tkinter import messagebox
 
 import sys
 
@@ -183,6 +184,17 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Enregistrer l'éxécutable",
             "en":"Save the executable"
         }
+
+        t030 = {
+            "fr":"Information sur la compilation",
+            "en":"Compiling information"
+        }
+
+        t031 = {
+            "fr": "Vous venez de créer un exécutable Linux.\nN'oubliez pas que pour l'exécuter, le fichier doit être marqué comme 'exécutable'. Pour cela, vous pouvez aller dans les propriétés du fichier, ou faire la commande :\nchmod +x nom_du_binaire",
+            "en": "You have just created a Linux executable.\nDon't forget that to run it, the file must be marked as 'executable'. To do this, you can go to the file properties or run the command:\nchmod +x binary_name"
+        }
+
     
     def save_compile(extention_compile_save=".exe"):
         """Save the compile (copy the executable)"""
@@ -204,6 +216,14 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         if new_executable_file != "":
             shutil.move(executable_file, new_executable_file)
+
+            if os_name == "linux" and extention_compile_save == "":     # binary Linux
+                messagebox.showinfo(
+                    title=Trad.t030[language],
+                    message=Trad.t031[language]
+                )
+
+
 
             window_easy_compile.destroy()
 
