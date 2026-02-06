@@ -320,11 +320,6 @@ Description: {}
                             #shell=True,
                             text=True,
                         )
-                    # old :
-                    """PyInstaller.__main__.run([
-                            str(file),
-                            "--onefile",
-                        ])"""
                     
                     window_easy_compile.update()
                     
@@ -405,7 +400,6 @@ Description: {}
                 print("file : ", str(file))
                 subprocess.run(
                         ["pyinstaller", str(file), "--onefile"],
-                        #shell=True,
                         text=True,
                     )
                 
