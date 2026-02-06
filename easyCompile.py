@@ -397,6 +397,7 @@ Description: {}
             frame_message = compile_message()
 
             compile_ok = False
+            deb_ok = False
 
             window_easy_compile.update()
 
@@ -443,6 +444,12 @@ Description: {}
                         cwd=deb_build_dir
                     )
 
+                    shutil.move("./dist/easycompiledeb.deb", "./dist/" + file_name + ".deb")
+
+                    deb_ok = True
+
+
+
 
                 window_easy_compile.update()
                 
@@ -462,7 +469,7 @@ Description: {}
 
                 frame_button_compile = tk.Frame(window_end_compile)
 
-                button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile("")).grid(column=0, row=0)
+                button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else "")).grid(column=0, row=0)
 
                 button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
