@@ -19,6 +19,8 @@ import shutil
 
 import os
 
+import pathlib
+
 os_name = sys.platform
 
 def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py"):
@@ -195,6 +197,17 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en": "You have just created a Linux executable.\nDon't forget that to run it, the file must be marked as 'executable'. To do this, you can go to the file properties or run the command:\nchmod +x binary_name"
         }
 
+    file_info = {
+        "control":"""Package: {}
+Version: {}
+Section: {}
+Priority: optional
+Architecture: {}
+Depends: python3
+Maintainer: {} <{}>
+Description: {}
+"""
+    }
     
     def save_compile(extention_compile_save=".exe"):
         """Save the compile (copy the executable)"""
@@ -379,69 +392,99 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             """Lauche the compile for Linux"""
             compile_type = list_compiling.get()
 
-            if compile_type == text_type_of_compile["bin"]:
-                disabeled_window(window_easy_compile, "disabled")
+            disabeled_window(window_easy_compile, "disabled")
 
-                frame_message = compile_message()
+            frame_message = compile_message()
 
-                compile_ok = False
+            compile_ok = False
+
+            window_easy_compile.update()
+
+            try:
+                print("file : ", str(file))
+                subprocess.run(
+                        ["pyinstaller", str(file), "--onefile"],
+                        #shell=True,
+                        text=True,
+                    )
+                
+                if compile_type == text_type_of_compile["deb"]:     # make a *.deb
+                    # delet and make the folder :
+
+                    try: shutil.rmtree("./dist/easycompiledeb")
+                    except: pass
+
+                    
+                    os.makedirs("./dist/easycompiledeb", exist_ok=True)
+
+                    os.makedirs("./dist/easycompiledeb/usr/bin", exist_ok=True)
+
+                    os.makedirs("./dist/easycompiledeb/DEBIAN", exist_ok=True)
+
+                    # --------
+
+                    source_file = os.path.abspath(file)
+                    parent_dir = os.path.dirname(source_file)
+                    file_name = os.path.splitext(os.path.basename(source_file))[0]
+
+                    executable_file = os.path.join(parent_dir, "dist", file_name)
+
+                    shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
+
+                    controle_file = file_info["control"].format(file_name, "1.0", "utils", "arm64", "Nam", "Email", "Description")
+
+
+                    pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
+
+                    deb_build_dir = os.path.abspath("./dist")
+
+                    subprocess.run(
+                        ["dpkg-deb", "--build", "easycompiledeb"],
+                        cwd=deb_build_dir
+                    )
+
 
                 window_easy_compile.update()
-
-                try:
-                    print("file : ", str(file))
-                    subprocess.run(
-                            ["pyinstaller", str(file), "--onefile"],
-                            #shell=True,
-                            text=True,
-                        )
-                    # old :
-                    """PyInstaller.__main__.run([
-                            str(file),
-                            "--onefile",
-                        ])"""
-                    
-                    window_easy_compile.update()
-                    
-                    compile_ok = True
                 
-                except Exception as e:
-                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+                compile_ok = True
+            
+            except Exception as e:
+                window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
 
-                    window_easy_compile.update()
-                    compile_ok = False
-                
-                if compile_ok :
-                    window_end_compile = tk.Toplevel(window_easy_compile)
-                    window_end_compile.title(Trad.t025[language])
+                window_easy_compile.update()
+                compile_ok = False
+            
+            if compile_ok :
+                window_end_compile = tk.Toplevel(window_easy_compile)
+                window_end_compile.title(Trad.t025[language])
 
-                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+                text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
 
-                    frame_button_compile = tk.Frame(window_end_compile)
+                frame_button_compile = tk.Frame(window_end_compile)
 
-                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile("")).grid(column=0, row=0)
+                button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile("")).grid(column=0, row=0)
 
-                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
-                    frame_button_compile.pack()
+                frame_button_compile.pack()
 
-                    window_end_compile.grab_set()
-                    window_end_compile.wait_window()
+                window_end_compile.grab_set()
+                window_end_compile.wait_window()
 
-                try:
-                    frame_message.destroy()
-                
-                    disabeled_window(window_easy_compile, "normal")
-                except:
-                    pass
+            try:
+                frame_message.destroy()
+            
+                disabeled_window(window_easy_compile, "normal")
+            except:
+                pass
 
         frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
 
         text_info_compiling = tk.Label(frame_type_compiling, text=Trad.t001[language])
         text_info_compiling.pack()
 
-        list_compiling = ttk.Combobox(frame_type_compiling, values=[text_type_of_compile["bin"]], state="readonly", width=25)
+        list_compiling = ttk.Combobox(frame_type_compiling, values=[text_type_of_compile["bin"], text_type_of_compile["deb"]], state="readonly", width=25)
         list_compiling.current(0)
         list_compiling.pack()
 
