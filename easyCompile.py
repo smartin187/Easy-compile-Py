@@ -43,8 +43,8 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
                 }
 
         t001 = {
-            "fr":"Choisiser le type de compilation pour Window :",
-            "en":"Select the type of compiling for Window:"
+            "fr":"Choisissez le type de compilation pour Windows :",
+            "en":"Select the type of compilation for Windows:"
         }
 
         t002 = {
@@ -54,12 +54,12 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         t003 = {
             "fr":"Configuration",
-            "en":"Configure"
+            "en":"Configuration"
         }
 
         t004 = {
             "fr":"Aucun paramètre...",
-            "en":"No configure..."
+            "en":"No configuration..."
         }
 
         t005 = {
@@ -68,12 +68,12 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t006 = {
-            "fr":"Compilation en cours,\nVeuiller patienter...",
-            "en":"Compiling in progress,\nPlease wait..."
+            "fr":"Compilation en cours,\nVeuillez patienter...",
+            "en":"Compilation in progress,\nPlease wait..."
         }
 
         t007 = {
-            "fr":"Ne fermer pas cette fênetre.",
+            "fr":"Ne fermez pas cette fenêtre.",
             "en":"Do not close this window."
         }
 
@@ -83,7 +83,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t009 = {
-            "fr":"Désolé, une erreur est arrivé lors de la compilation...",
+            "fr":"Désolé, une erreur est arrivée lors de la compilation...",
             "en":"Sorry, an error occurred during compilation..."
         }
 
@@ -93,23 +93,23 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t011 = {
-            "fr":"Dépandance manquante",
-            "en":"Missing depandance"
+            "fr":"Dépendance manquante",
+            "en":"Missing dependency"
         }
 
         t012 = {
-            "fr":"Easy Compile a besouin de Pyinstaller pour compiler.\nPyinstaller n'est pas installer sur votre ordinateur.",
-            "en":"Easy Compile needs Pyinstaller to compile.\nPyinstaller is not installed on your computer."
+            "fr":"Easy Compile a besoin de PyInstaller pour compiler.\nPyInstaller n'est pas installé sur votre ordinateur.",
+            "en":"Easy Compile needs PyInstaller to compile.\nPyInstaller is not installed on your computer."
         }
 
         t013 = {
-            "fr":"Intalation automatique",
+            "fr":"Installation automatique",
             "en":"Automatic installation"
         }
 
         t014 = {
-            "fr":"L'instalation de pyinstaller a étais réaliser avec succé.\n Vous devez redémarer Easy Compile pour appliquer l'instalation...",
-            "en":"The installation of pyinstaller was successful.\n You must restart Easy Compile to apply the installation..."
+            "fr":"L'installation de PyInstaller a été réalisée avec succès.\nVous devez redémarrer Easy Compile pour appliquer l'installation...",
+            "en":"The installation of PyInstaller was successful.\nYou must restart Easy Compile to apply the installation..."
         }
 
         t015 = {
@@ -118,17 +118,17 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t016 = {
-            "fr":"Erreur d'instalation",
+            "fr":"Erreur d'installation",
             "en":"Installation error"
         }
 
         t017 = {
-            "fr":"Impossible d'instaler pyinstaller automatiquement. Vous pouvez esseyer la commande dans un terminal :\npip install pyinstaller\n\nVérifier aussi que pip est bien installer.\n\nEasy Compile va être fermer...",
-            "en":"Unable to automatically install pyinstaller. You can try the command in a terminal:\npip install pyinstaller\n\nAlso check that pip is installed.\n\nEasy Compile will be closed..."
+            "fr":"Impossible d'installer PyInstaller automatiquement. Vous pouvez essayer la commande dans un terminal :\npip install pyinstaller\n\nVérifiez aussi que pip est bien installé.\n\nEasy Compile va être fermé...",
+            "en":"Unable to automatically install PyInstaller. You can try the command in a terminal:\npip install pyinstaller\n\nAlso check that pip is installed.\n\nEasy Compile will be closed..."
         }
 
         t018 = {
-            "fr":"Téléchager Python",
+            "fr":"Télécharger Python",
             "en":"Download Python"
         }
 
@@ -138,37 +138,37 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t020 = {
-            "fr":"Instalation manuelle",
-            "en":"Manuel install"
+            "fr":"Installation manuelle",
+            "en":"Manual install"
         }
 
         t021 = {
-            "fr":"Suiver les étapes suivante pour installer manuellement Pyinstaller :",
-            "en":"Follow the next steps to manually install Pyinstaller:"
+            "fr":"Suivez les étapes suivantes pour installer manuellement PyInstaller :",
+            "en":"Follow the next steps to manually install PyInstaller:"
         }
 
         t022 = {
-            "fr":"(Étape à suivre si pip n'est pas installer)\nTélécharger pip, et vérifier que pip s'installe correctement.",
+            "fr":"(Étape à suivre si pip n'est pas installé)\nTéléchargez pip, et vérifiez que pip s'installe correctement.",
             "en":"(Step to follow if pip is not installed)\nDownload pip, and make sure pip is installed correctly."
         }
 
         t023 = {
-            "fr":"Dans un terminal, écriver la commande :\npip install pyinstaller",
+            "fr":"Dans un terminal, écrivez la commande :\npip install pyinstaller",
             "en":"In a terminal, write the command:\npip install pyinstaller"
         }
 
         t024 = {
-            "fr":"Redémarer Easy Compile...",
+            "fr":"Redémarrez Easy Compile...",
             "en":"Restart Easy Compile..."
         }
 
         t025 = {
-            "fr":"Comliation terminer",
+            "fr":"Compilation terminée",
             "en":"Build complete"
         }
 
         t026 = {
-            "fr":"La compilation est terminer.",
+            "fr":"La compilation est terminée.",
             "en":"The compilation is complete."
         }
 
@@ -183,17 +183,17 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t029 = {
-            "fr":"Enregistrer l'éxécutable",
+            "fr":"Enregistrer l'exécutable",
             "en":"Save the executable"
         }
 
         t030 = {
-            "fr":"Information sur la compilation",
-            "en":"Compiling information"
+            "fr":"Informations sur la compilation",
+            "en":"Compilation information"
         }
 
         t031 = {
-            "fr": "Vous venez de créer un exécutable Linux.\nN'oubliez pas que pour l'exécuter, le fichier doit être marqué comme 'exécutable'. Pour cela, vous pouvez aller dans les propriétés du fichier, ou faire la commande :\nchmod +x nom_du_binaire",
+            "fr": "Vous venez de créer un exécutable Linux.\nN'oubliez pas que pour l'exécuter, le fichier doit être marqué comme 'exécutable'. Pour cela, vous pouvez aller dans les propriétés du fichier, ou exécuter la commande :\nchmod +x nom_du_binaire",
             "en": "You have just created a Linux executable.\nDon't forget that to run it, the file must be marked as 'executable'. To do this, you can go to the file properties or run the command:\nchmod +x binary_name"
         }
 
