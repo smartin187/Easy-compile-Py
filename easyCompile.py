@@ -198,8 +198,8 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t032 = {
-            "fr":"Nom du package :",
-            "en":"Package name:"
+            "fr":"Vertion du package :",
+            "en":"Package vertion:"
         }
 
         t033 = {
@@ -448,7 +448,7 @@ Description: {}
 
                     shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
 
-                    controle_file = file_info["control"].format(file_name, "1.0", "utils", "arm64", "Nam", "Email", "Description")
+                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), "utils", "arm64", "Nam", "Email", "Description")
 
 
                     pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
@@ -502,6 +502,13 @@ Description: {}
             except:
                 pass
 
+        # -------------------- setting of compile :
+
+        entry_vertion = None
+
+        # ---------
+
+
         frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
 
         text_info_compiling = tk.Label(frame_type_compiling, text=Trad.t001[language])
@@ -537,7 +544,7 @@ Description: {}
         frame_setting_deb = make_frame_setting_deb()
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion
             WITH_ENTRY = 15
             # setting for normal compil :
 
@@ -553,8 +560,8 @@ Description: {}
                 colum_0.grid(row=0, column=0)
 
                 text_package = tk.Label(colum_0, text=Trad.t032[language]).grid(column=0, row=0)
-                entry_package = tk.Entry(colum_0, width=WITH_ENTRY)
-                entry_package.grid(column=1, row=0)
+                entry_vertion = tk.Entry(colum_0, width=WITH_ENTRY)
+                entry_vertion.grid(column=1, row=0)
 
                 # a terminer : ajouter toutes les autre clé / valeur du fichier info, puis les mettre avec .format dans le fichier
 
