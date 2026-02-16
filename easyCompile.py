@@ -197,6 +197,28 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en": "You have just created a Linux executable.\nDon't forget that to run it, the file must be marked as 'executable'. To do this, you can go to the file properties or run the command:\nchmod +x binary_name"
         }
 
+        t032 = {
+            "fr":"Nom du package :",
+            "en":"Package name:"
+        }
+
+        t033 = {
+            "fr":"Icon de l'éxécutable",
+            "en":"Executable icon"
+        }
+
+        t034 = {
+            "fr":"Paramètre du package Debian",
+            "en":"Config of Debian package"
+        }
+
+        t035 = {
+            "fr":"Configuration du binaire Linux",
+            "en":"Binary Linux config"
+        }
+
+    UPTATE_GUIT = 100
+
     file_info = {
         "control":"""Package: {}
 Version: {}
@@ -493,8 +515,59 @@ Description: {}
 
         frame_config_compile = tk.LabelFrame(frame, text=Trad.t003[language])
 
-        texte_config = tk.Label(frame_config_compile, text=Trad.t004[language])
-        texte_config.pack()
+        frame_setting_bin = tk.LabelFrame(frame_config_compile, text=Trad.t035[language])
+        # frame setting bin if not used now...
+        #text_incon = tk.Label(frame_setting_bin, text=Trad.t033[language]).pack()
+
+        frame_setting_bin.grid(column=0, row=0)
+
+        
+        frame_config_type = "bin"
+
+        frame_setting_deb_1 = tk.Frame(frame_config_compile)
+        frame_setting_deb_1.grid(column=0, row=1)
+
+        def make_frame_setting_deb():
+            """Returne the frame setting deb"""
+
+            frame_setting_deb = tk.LabelFrame(frame_setting_deb_1, text=Trad.t034[language])
+            frame_setting_deb.grid(column=0, row=0)
+            return frame_setting_deb
+
+        frame_setting_deb = make_frame_setting_deb()
+
+        def set_frame_config():
+            nonlocal frame_config_type, frame_setting_deb
+            WITH_ENTRY = 15
+            # setting for normal compil :
+
+
+            
+            if list_compiling.get() == text_type_of_compile["deb"] and frame_config_type=="bin":
+                frame_config_type = "deb"
+                # make the config for deb :
+                frame_setting_deb.destroy()
+                frame_setting_deb = make_frame_setting_deb()
+
+                colum_0 = tk.Frame(frame_setting_deb)
+                colum_0.grid(row=0, column=0)
+
+                text_package = tk.Label(colum_0, text=Trad.t032[language]).grid(column=0, row=0)
+                entry_package = tk.Entry(colum_0, width=WITH_ENTRY)
+                entry_package.grid(column=1, row=0)
+
+                # a terminer : ajouter toutes les autre clé / valeur du fichier info, puis les mettre avec .format dans le fichier
+
+            elif list_compiling.get() == text_type_of_compile["bin"] :
+                frame_setting_deb.destroy()
+                frame_config_type = "bin"
+
+
+            try: window_easy_compile.after(UPTATE_GUIT, set_frame_config)
+            except: pass
+        
+        set_frame_config()
+
 
         frame_config_compile.pack()
 
