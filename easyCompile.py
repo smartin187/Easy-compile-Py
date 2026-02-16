@@ -217,6 +217,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en":"Binary Linux config"
         }
 
+        t036 = {
+            "fr":"Section du package (type d'application) :",
+            "en":"Package section (type of application):"
+        }
+
     UPTATE_GUIT = 100
 
     file_info = {
@@ -448,7 +453,7 @@ Description: {}
 
                     shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
 
-                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), "utils", "arm64", "Nam", "Email", "Description")
+                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), "arm64", "Nam", "Email", "Description")
 
 
                     pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
@@ -505,6 +510,7 @@ Description: {}
         # -------------------- setting of compile :
 
         entry_vertion = None
+        combobox_section = None
 
         # ---------
 
@@ -544,7 +550,7 @@ Description: {}
         frame_setting_deb = make_frame_setting_deb()
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section
             WITH_ENTRY = 15
             # setting for normal compil :
 
@@ -562,6 +568,11 @@ Description: {}
                 text_package = tk.Label(colum_0, text=Trad.t032[language]).grid(column=0, row=0)
                 entry_vertion = tk.Entry(colum_0, width=WITH_ENTRY)
                 entry_vertion.grid(column=1, row=0)
+
+                text_section = tk.Label(colum_0, text=Trad.t036[language]).grid(column=0, row=1)
+                combobox_section = ttk.Combobox(colum_0, values=["admin", "devel", "doc", "editors", "games", "graphics", "libs", "libdevel", "misc", "net", "python", "shells", "sound", "text", "utils", "web"], state="readonly", width=WITH_ENTRY)
+                combobox_section.grid(column=1, row=1)
+                combobox_section.current(14)
 
                 # a terminer : ajouter toutes les autre clé / valeur du fichier info, puis les mettre avec .format dans le fichier
 
