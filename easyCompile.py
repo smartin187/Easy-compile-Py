@@ -10,7 +10,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 
 import sys
-
+import platform
 import subprocess
 
 import webbrowser
@@ -221,6 +221,26 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Section du package (type d'application) :",
             "en":"Package section (type of application):"
         }
+
+        t037 = {
+            "fr":"Architecture :",
+            "en":"Architecture:"
+        }
+    
+    def get_debian_architecture():
+        """Return the architecture"""
+        machine = platform.machine()
+        
+        arch_map = {
+            'x86_64': 'amd64',
+            'aarch64': 'arm64',
+            'armv7l': 'armhf',
+            'i686': 'i386',
+            'i386': 'i386',
+        }
+        
+        return arch_map.get(machine, machine)
+
 
     UPTATE_GUIT = 100
 
@@ -453,7 +473,7 @@ Description: {}
 
                     shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
 
-                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), "arm64", "Nam", "Email", "Description")
+                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), "Nam", "Email", "Description")
 
 
                     pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
@@ -511,6 +531,7 @@ Description: {}
 
         entry_vertion = None
         combobox_section = None
+        entry_architecture = None
 
         # ---------
 
@@ -550,7 +571,7 @@ Description: {}
         frame_setting_deb = make_frame_setting_deb()
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture
             WITH_ENTRY = 15
             # setting for normal compil :
 
@@ -565,6 +586,9 @@ Description: {}
                 colum_0 = tk.Frame(frame_setting_deb)
                 colum_0.grid(row=0, column=0)
 
+                colum_1 = tk.Frame(frame_setting_deb)
+                colum_1.grid(column=1, row=0)
+
                 text_package = tk.Label(colum_0, text=Trad.t032[language]).grid(column=0, row=0)
                 entry_vertion = tk.Entry(colum_0, width=WITH_ENTRY)
                 entry_vertion.grid(column=1, row=0)
@@ -573,6 +597,14 @@ Description: {}
                 combobox_section = ttk.Combobox(colum_0, values=["admin", "devel", "doc", "editors", "games", "graphics", "libs", "libdevel", "misc", "net", "python", "shells", "sound", "text", "utils", "web"], state="readonly", width=WITH_ENTRY)
                 combobox_section.grid(column=1, row=1)
                 combobox_section.current(14)
+
+                text_architecture = tk.Label(colum_1, text=Trad.t037[language]).grid(column=0, row=0)
+                entry_architecture = tk.Entry(colum_1, width=WITH_ENTRY)
+                entry_architecture.insert(0, get_debian_architecture())
+                entry_architecture["state"]="disabled"
+                entry_architecture.grid(column=1, row=0)
+
+
 
                 # a terminer : ajouter toutes les autre clé / valeur du fichier info, puis les mettre avec .format dans le fichier
 
