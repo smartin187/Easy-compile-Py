@@ -639,9 +639,51 @@ Description: {}
                 entry_description.grid(column=1, row=1)
                 entry_description.insert(0.0, "Description of package")
 
+                def control_config():
+                    """if the debian config is bad, the compilation is disabled."""
+                    RED = "#FF0000"
+                    NORMAL = "#FFFFFF"
+                    try:
+                        bad_config = False
+                        
+                        version = entry_vertion.get()
+                        if version == "":
+                            entry_vertion.configure(bg=RED)
+                            bad_config = True
+                        else: 
+                            entry_vertion.configure(bg=NORMAL)
+
+                        name = entry_name.get()
+                        if name == "":
+                            entry_name.configure(bg=RED)
+                            bad_config = True
+                        else: 
+                            entry_name.configure(bg=NORMAL)
+                        
+                        email = entry_email.get()
+                        if email == "" :
+                            entry_email.configure(bg=RED)
+                            bad_config = True
+                        else: 
+                            entry_email.configure(bg=NORMAL)
+                        
+                        description = entry_description.get(0.0, tk.END)
+                        if description == "\n":
+                            entry_description.configure(bg=RED)
+                            bad_config = True
+                        else: 
+                            entry_description.configure(bg=NORMAL)
+
+                        if bad_config: button_compile["state"] = "disabled"
+                        else: button_compile["state"] = "normal"
 
 
-                # a terminer : ajouter toutes les autre clé / valeur du fichier info, puis les mettre avec .format dans le fichier
+                        frame_setting_deb.after(UPTATE_GUIT, control_config)
+
+                    except: pass
+                
+                control_config()
+
 
             elif list_compiling.get() == text_type_of_compile["bin"] :
                 frame_setting_deb.destroy()
