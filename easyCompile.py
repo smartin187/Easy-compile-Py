@@ -8,7 +8,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
-from tkinter.scrolledtext import ScrolledText
 
 import sys
 import platform
@@ -489,7 +488,7 @@ Description: {}
 
                     shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
 
-                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get(0.0, tk.END))
+                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get())
 
 
                     pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
@@ -635,9 +634,9 @@ Description: {}
 
                 text_description = tk.Label(colum_1, text=Trad.t040[language]).grid(column=0, row=1)
 
-                entry_description = ScrolledText(colum_1, width=WITH_ENTRY, height=2)
+                entry_description = tk.Entry(colum_1, width=WITH_ENTRY)
                 entry_description.grid(column=1, row=1)
-                entry_description.insert(0.0, "Description of package")
+                entry_description.insert(0, "Description of package")
 
                 def control_config():
                     """if the debian config is bad, the compilation is disabled."""
@@ -667,8 +666,8 @@ Description: {}
                         else: 
                             entry_email.configure(bg=NORMAL)
                         
-                        description = entry_description.get(0.0, tk.END)
-                        if description == "\n":
+                        description = entry_description.get()
+                        if description == "":
                             entry_description.configure(bg=RED)
                             bad_config = True
                         else: 
