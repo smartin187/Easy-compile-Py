@@ -610,6 +610,7 @@ Description: {}
                 text_package = tk.Label(colum_0, text=Trad.t032[language]).grid(column=0, row=0)
                 entry_vertion = tk.Entry(colum_0, width=WITH_ENTRY)
                 entry_vertion.grid(column=1, row=0)
+                entry_vertion.insert(0, "1.0")
 
                 text_section = tk.Label(colum_0, text=Trad.t036[language]).grid(column=0, row=1)
                 combobox_section = ttk.Combobox(colum_0, values=["admin", "devel", "doc", "editors", "games", "graphics", "libs", "libdevel", "misc", "net", "python", "shells", "sound", "text", "utils", "web"], state="readonly", width=WITH_ENTRY)
@@ -619,10 +620,12 @@ Description: {}
                 text_name = tk.Label(colum_0, text=Trad.t038[language]).grid(column=0, row=2)
                 entry_name = tk.Entry(colum_0, width=WITH_ENTRY)
                 entry_name.grid(column=1, row=2)
+                entry_name.insert(0, "User")
 
                 text_email = tk.Label(colum_0, text=Trad.t039[language]).grid(column=0, row=3)
                 entry_email = tk.Entry(colum_0, width=WITH_ENTRY)
                 entry_email.grid(column=1, row=3)
+                entry_email.insert(0, "email@email.com")
 
                 text_architecture = tk.Label(colum_1, text=Trad.t037[language]).grid(column=0, row=0)
                 entry_architecture = tk.Entry(colum_1, width=WITH_ENTRY)
@@ -634,6 +637,7 @@ Description: {}
 
                 entry_description = ScrolledText(colum_1, width=WITH_ENTRY, height=2)
                 entry_description.grid(column=1, row=1)
+                entry_description.insert(0.0, "Description of package")
 
 
 
