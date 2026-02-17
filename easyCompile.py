@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter.scrolledtext import ScrolledText
 
 import sys
 import platform
@@ -235,6 +236,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         t039 = {
             "fr":"Votre adresse email :",
             "en":"Your email adresse:"
+        }
+
+        t040 = {
+            "fr":"Description :",
+            "en":"Description:"
         }
     
     def get_debian_architecture():
@@ -483,7 +489,7 @@ Description: {}
 
                     shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
 
-                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), "Description")
+                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get(0.0, tk.END))
 
 
                     pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
@@ -544,6 +550,7 @@ Description: {}
         entry_architecture = None
         entry_name = None
         entry_email = None
+        entry_description = None
         # ---------
 
 
@@ -582,7 +589,7 @@ Description: {}
         frame_setting_deb = make_frame_setting_deb()
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description
             WITH_ENTRY = 15
             # setting for normal compil :
 
@@ -622,6 +629,11 @@ Description: {}
                 entry_architecture.insert(0, get_debian_architecture())
                 entry_architecture["state"]="disabled"
                 entry_architecture.grid(column=1, row=0)
+
+                text_description = tk.Label(colum_1, text=Trad.t040[language]).grid(column=0, row=1)
+
+                entry_description = ScrolledText(colum_1, width=WITH_ENTRY, height=2)
+                entry_description.grid(column=1, row=1)
 
 
 
