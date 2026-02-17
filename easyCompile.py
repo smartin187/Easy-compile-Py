@@ -226,6 +226,16 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Architecture :",
             "en":"Architecture:"
         }
+
+        t038 = {
+            "fr":"Votre nom :",
+            "en":"Your name:"
+        }
+
+        t039 = {
+            "fr":"Votre adresse email :",
+            "en":"Your email adresse:"
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -473,7 +483,7 @@ Description: {}
 
                     shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
 
-                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), "Nam", "Email", "Description")
+                    controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), "Description")
 
 
                     pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
@@ -532,7 +542,8 @@ Description: {}
         entry_vertion = None
         combobox_section = None
         entry_architecture = None
-
+        entry_name = None
+        entry_email = None
         # ---------
 
 
@@ -571,7 +582,7 @@ Description: {}
         frame_setting_deb = make_frame_setting_deb()
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email
             WITH_ENTRY = 15
             # setting for normal compil :
 
@@ -597,6 +608,14 @@ Description: {}
                 combobox_section = ttk.Combobox(colum_0, values=["admin", "devel", "doc", "editors", "games", "graphics", "libs", "libdevel", "misc", "net", "python", "shells", "sound", "text", "utils", "web"], state="readonly", width=WITH_ENTRY)
                 combobox_section.grid(column=1, row=1)
                 combobox_section.current(14)
+
+                text_name = tk.Label(colum_0, text=Trad.t038[language]).grid(column=0, row=2)
+                entry_name = tk.Entry(colum_0, width=WITH_ENTRY)
+                entry_name.grid(column=1, row=2)
+
+                text_email = tk.Label(colum_0, text=Trad.t039[language]).grid(column=0, row=3)
+                entry_email = tk.Entry(colum_0, width=WITH_ENTRY)
+                entry_email.grid(column=1, row=3)
 
                 text_architecture = tk.Label(colum_1, text=Trad.t037[language]).grid(column=0, row=0)
                 entry_architecture = tk.Entry(colum_1, width=WITH_ENTRY)
