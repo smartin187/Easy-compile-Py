@@ -5,9 +5,7 @@ This module have the fonction "easyCompile", for easy compile Python.
 """
 
 import tkinter as tk
-from tkinter import ttk
-from tkinter import filedialog
-from tkinter import messagebox
+from tkinter import ttk, filedialog, messagebox
 
 import sys
 import platform
