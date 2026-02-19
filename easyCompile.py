@@ -246,6 +246,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Nom du package :",
             "en":"Package name:"
         }
+
+        t042 = {
+            "fr":"Nom de l'éxécutable\n(nom dans le path) :",
+            "en":"Executable name\n(name one path):"
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -493,7 +498,7 @@ Description: {}
 
                     executable_file = os.path.join(parent_dir, "dist", file_name)
 
-                    shutil.move("./dist/" + file_name, "./dist/easycompiledeb/usr/bin")
+                    shutil.move("./dist/" + file_name, "./dist/easycompiledeb/usr/bin/" + entry_name_one_path.get())
 
                     controle_file = file_info["control"].format(entry_title.get(), entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get())
 
@@ -558,6 +563,7 @@ Description: {}
         entry_email = None
         entry_description = None
         entry_title = None
+        entry_name_one_path = None
         # ---------
 
 
@@ -596,11 +602,9 @@ Description: {}
         frame_setting_deb = make_frame_setting_deb()
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path
             WITH_ENTRY = 15
             # setting for normal compil :
-
-
             
             if list_compiling.get() == text_type_of_compile["deb"] and frame_config_type=="bin":
                 frame_config_type = "deb"
@@ -645,10 +649,16 @@ Description: {}
                 entry_title.insert(0, "titleofpackage")
                 entry_title.grid(column=1, row=1)
 
-                text_description = tk.Label(colum_1, text=Trad.t040[language]).grid(column=0, row=2)
+                text_path = tk.Label(colum_1, text=Trad.t042[language]).grid(column=0, row=2)
+                entry_name_one_path = tk.Entry(colum_1, width=WITH_ENTRY)
+                entry_name_one_path.grid(column=1, row=2)
+                entry_name_one_path.insert(0, "myapp")
+                
+
+                text_description = tk.Label(colum_1, text=Trad.t040[language]).grid(column=0, row=3)
 
                 entry_description = tk.Entry(colum_1, width=WITH_ENTRY)
-                entry_description.grid(column=1, row=2)
+                entry_description.grid(column=1, row=3)
                 entry_description.insert(0, "Description of package")
 
                 def control_config():
