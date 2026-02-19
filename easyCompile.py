@@ -7,6 +7,8 @@ This module have the fonction "easyCompile", for easy compile Python.
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
+import traceback
+
 import sys
 import platform
 import subprocess
@@ -486,7 +488,7 @@ Description: {}
 
                     executable_file = os.path.join(parent_dir, "dist", file_name)
 
-                    shutil.move(executable_file, "./dist/easycompiledeb/usr/bin")
+                    shutil.move("./dist/" + file_name, "./dist/easycompiledeb/usr/bin")
 
                     controle_file = file_info["control"].format(file_name, entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get())
 
@@ -516,6 +518,8 @@ Description: {}
 
                 window_easy_compile.update()
                 compile_ok = False
+
+                print(traceback.format_exc())
             
             if compile_ok :
                 window_end_compile = tk.Toplevel(window_easy_compile)
