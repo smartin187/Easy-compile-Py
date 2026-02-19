@@ -266,6 +266,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         
         return arch_map.get(machine, machine)
 
+    CHAR_LIST = {
+        "az":["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z"],
+        "09":["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    }
+
 
     UPTATE_GUIT = 100
 
@@ -666,7 +671,7 @@ Description: {}
                     def vertion_ok(vertion:str):
                         """Return True if the vertion is good, False else"""
                         for char in vertion:
-                            if not(char=="." or char=="0" or char=="1" or char=="2" or char=="3" or char=="4" or char=="5" or char=="6" or char=="7" or char=="8" or char=="9"):
+                            if (not(char in CHAR_LIST["09"])) and (char != "."):
                                 return False
                         
                         return True
