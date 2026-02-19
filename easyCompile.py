@@ -272,12 +272,14 @@ Description: {}
     def save_compile(extention_compile_save=".exe"):
         """Save the compile (copy the executable)"""
 
-        # get the executable file :
-        source_file = os.path.abspath(file)
+        """# get the executable file :
+        
         parent_dir = os.path.dirname(source_file)
-        file_name = os.path.splitext(os.path.basename(source_file))[0]
+        
         executable_file = os.path.join(parent_dir, "dist", file_name + extention_compile_save)
-
+        """
+        source_file = os.path.abspath(file)
+        file_name = os.path.splitext(os.path.basename(source_file))[0]
         
         new_executable_file = filedialog.asksaveasfilename(
                                                             title=Trad.t029[language],
@@ -288,7 +290,7 @@ Description: {}
             new_executable_file = new_executable_file[0] if new_executable_file else ""
 
         if new_executable_file != "":
-            shutil.move(executable_file, new_executable_file)
+            shutil.move("./dist/" + file_name + extention_compile_save, new_executable_file)
 
             if os_name == "linux" and extention_compile_save == "":     # binary Linux
                 messagebox.showinfo(
