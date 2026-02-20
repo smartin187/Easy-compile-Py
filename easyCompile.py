@@ -676,6 +676,14 @@ Description: {}
                         
                         return True
                     
+                    def title_ok(title:str):
+                        """Return True if the title is good, False else"""
+                        for char in title:
+                            if (char not in CHAR_LIST["09"]) and (char not in CHAR_LIST["az"]) and (char not in "-+."):
+                                return False
+                        
+                        return True
+                    
                     RED = "#FF0000"
                     NORMAL = "#FFFFFF"
                     try:
@@ -692,7 +700,7 @@ Description: {}
                         if name == "":
                             entry_name.configure(bg=RED)
                             bad_config = True
-                        else: 
+                        else:
                             entry_name.configure(bg=NORMAL)
                         
                         email = entry_email.get()
@@ -708,6 +716,13 @@ Description: {}
                             bad_config = True
                         else: 
                             entry_description.configure(bg=NORMAL)
+                        
+                        titel = entry_title.get()
+                        if titel == "" or not(title_ok(titel)):
+                            entry_title.configure(bg=RED)
+                            bad_config = True
+                        else:
+                            entry_title.configure(bg=NORMAL)
 
                         if bad_config: button_compile["state"] = "disabled"
                         else: button_compile["state"] = "normal"
