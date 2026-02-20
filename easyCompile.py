@@ -687,42 +687,47 @@ Description: {}
                     RED = "#FF0000"
                     NORMAL = "#FFFFFF"
                     try:
+                        def field_error(entry):
+                            """Set bg of entry to red and disabeled the buton for compile"""
+                            nonlocal bad_config
+                            entry.configure(bg=RED)
+                            bad_config = True
+                        
+                        def field_normal(entry):
+                            """Set bg of entry to normal"""
+                            entry.configure(bg=NORMAL)
+
                         bad_config = False
                         
                         version = entry_vertion.get()
                         if version == "" or not(vertion_ok(version)):
-                            entry_vertion.configure(bg=RED)
-                            bad_config = True
+                            field_error(entry_vertion)
                         else: 
-                            entry_vertion.configure(bg=NORMAL)
+                            field_normal(entry_vertion)
 
                         name = entry_name.get()
                         if name == "":
-                            entry_name.configure(bg=RED)
-                            bad_config = True
+                            field_error(entry_name)
                         else:
-                            entry_name.configure(bg=NORMAL)
+                            field_normal(entry_name)
                         
                         email = entry_email.get()
                         if email == "" :
-                            entry_email.configure(bg=RED)
-                            bad_config = True
+                            field_error(entry_email)
                         else: 
-                            entry_email.configure(bg=NORMAL)
+                            field_normal(entry_email)
                         
                         description = entry_description.get()
                         if description == "":
-                            entry_description.configure(bg=RED)
-                            bad_config = True
+                            field_error(entry_description)
                         else: 
-                            entry_description.configure(bg=NORMAL)
+                            field_normal(entry_description)
                         
                         titel = entry_title.get()
                         if titel == "" or not(title_ok(titel)):
-                            entry_title.configure(bg=RED)
-                            bad_config = True
+                            field_error(entry_title)
                         else:
-                            entry_title.configure(bg=NORMAL)
+                            field_normal(entry_title)
 
                         if bad_config: button_compile["state"] = "disabled"
                         else: button_compile["state"] = "normal"
