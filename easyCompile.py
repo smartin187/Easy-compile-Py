@@ -251,6 +251,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Nom de l'éxécutable\n(nom dans le path) :",
             "en":"Executable name\n(name one path):"
         }
+
+        t043 = {
+            "fr":"Appimage",
+            "en":"Appimage"
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -585,7 +590,7 @@ exec "$APPDIR/usr/bin/test" "$@"'''
         text_info_compiling = tk.Label(frame_type_compiling, text=Trad.t001[language])
         text_info_compiling.pack()
 
-        list_compiling = ttk.Combobox(frame_type_compiling, values=[text_type_of_compile["bin"], text_type_of_compile["deb"]], state="readonly", width=25)
+        list_compiling = ttk.Combobox(frame_type_compiling, values=[text_type_of_compile["bin"], text_type_of_compile["deb"], text_type_of_compile["appimage"]], state="readonly", width=25)
         list_compiling.current(0)
         list_compiling.pack()
 
@@ -611,15 +616,23 @@ exec "$APPDIR/usr/bin/test" "$@"'''
             frame_setting_deb = tk.LabelFrame(frame_setting_deb_1, text=Trad.t034[language])
             frame_setting_deb.grid(column=0, row=0)
             return frame_setting_deb
+        def make_frame_setting_appimage():
+            """Return the frame setting appimage"""
+            frame_setting_appimage = tk.LabelFrame(frame_setting_deb_1, text=Trad.t043[language])
+            frame_setting_appimage.grid(column=0, row=0)
+            return frame_setting_appimage
 
         frame_setting_deb = make_frame_setting_deb()
+        frame_setting_appimage = None
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage
             WITH_ENTRY = 15
             # setting for normal compil :
             
-            if list_compiling.get() == text_type_of_compile["deb"] and frame_config_type=="bin":
+            if list_compiling.get() == text_type_of_compile["deb"] and (frame_config_type=="bin" or frame_config_type=="appimage"):
+                if frame_config_type == "appimage":
+                    frame_setting_appimage.destroy()
                 frame_config_type = "deb"
                 # make the config for deb :
                 frame_setting_deb.destroy()
@@ -761,10 +774,22 @@ exec "$APPDIR/usr/bin/test" "$@"'''
                 
                 control_config()
 
+            elif list_compiling.get() == text_type_of_compile["appimage"] and frame_config_type != "appimage":
+                if frame_config_type == "deb":
+                    frame_setting_deb.destroy()
+                frame_config_type = "appimage"
+
+                frame_setting_appimage = make_frame_setting_appimage()
+                
 
             elif list_compiling.get() == text_type_of_compile["bin"] :
-                frame_setting_deb.destroy()
+                if frame_config_type == "deb":
+                    frame_setting_deb.destroy()
+                elif frame_config_type == "appimage":
+                    frame_setting_appimage.destroy()
                 frame_config_type = "bin"
+            
+            print(frame_config_type)
 
 
             try: window_easy_compile.after(UPTATE_GUIT, set_frame_config)
