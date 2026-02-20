@@ -476,7 +476,6 @@ Description: {}
             window_easy_compile.update()
 
             try:
-                print("file : ", str(file))
                 subprocess.run(
                         ["pyinstaller", str(file), "--onefile"],
                         text=True,
@@ -683,7 +682,15 @@ Description: {}
                                 return False
                         
                         return True
-                    
+
+                    def name_path_ok(name_path):
+                        """Retunr True if the name is good, False else"""
+                        for char in name_path:
+                            if (char not in CHAR_LIST["09"]) and (char not in CHAR_LIST["az"]) and (char != "_"):
+                                return False
+                        return True
+
+
                     RED = "#FF0000"
                     NORMAL = "#FFFFFF"
                     try:
@@ -728,6 +735,12 @@ Description: {}
                             field_error(entry_title)
                         else:
                             field_normal(entry_title)
+                        
+                        path_name = entry_name_one_path.get()
+                        if path_name == "" or not(name_path_ok(path_name)):
+                            field_error(entry_name_one_path)
+                        else:
+                            field_normal(entry_name_one_path)
 
                         if bad_config: button_compile["state"] = "disabled"
                         else: button_compile["state"] = "normal"
