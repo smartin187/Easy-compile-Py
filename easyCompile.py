@@ -283,7 +283,16 @@ Architecture: {}
 Depends: python3
 Maintainer: {} <{}>
 Description: {}
-"""
+""",
+        "desktop":"""[Desktop Entry]
+Name={}
+Exec={}
+Icon={}
+Type={}
+Categories={};""",
+    "AppRun":'''#!/bin/bash
+
+exec "$APPDIR/usr/bin/test" "$@"'''
     }
     
     def save_compile(extention_compile_save=".exe"):
