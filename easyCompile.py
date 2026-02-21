@@ -261,6 +261,76 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Nom de l'appimage :",
             "en":"Appimage name:"
         }
+
+        t045 = {
+            "fr":"Appimagetool indisponible",
+            "en":"Appimagetool unavailable"
+        }
+
+        t046 = {
+            "fr":"Pour générer des appimage, Easy Compile Py doit avoir Appimagetool.\nVous devez le télécharger, le mettre dans le même dossier que Easy Compile Py, et le renommer en 'appimagetool.appimage'.",
+            "en":"To generate appimage, Easy Compile Py needs Appimagetool.\nYou must download it, put it in the same folder as Easy Compile Py, and rename it to 'appimagetool.appimage'."
+        }
+
+        t047 = {
+            "fr":"Shouaiter vous installer Appimagetool ?",
+            "en":"Do you want to install Appimagetool?"
+        }
+
+        t048 = {
+            "fr":"Installer Appimagetool",
+            "en":"Install Appimagetool"
+        }
+
+        t049 = {
+            "fr":"Shouaiter vous installer Appimagetool automatiquement ?\nSi l'instalation automatique échoue, veiller faire l'installation manuelle...",
+            "en":"Do you want to install Appimagetool automatically?\nIf the automatic installation fails, please do the manual installation..."
+        }
+
+        t050 = {
+            "fr":"Avec l'instalation manuelle, vous aurait un guide pour l'instalation...",
+            "en":"With the manual installation, you will have a guide for the installation..."
+        }
+
+        t051 = {
+            "fr":"Instalation manuelle",
+            "en":"Manual install"
+        }
+
+        t052 = {
+            "fr":"Etape ",
+            "en":"Step "
+        }
+
+        t053 = {
+            "fr":"Télécharger AppimageTool depuis GitHub (au format appimage).\nPenser à téléchager la bonne architecture processeur.",
+            "en":"Download AppimageTool from GitHub (in appimage format).\nMake sure to download the correct processor architecture."
+        }
+
+        t054 = {
+            "fr":"Téléchargement sur GitHub",
+            "en":"Download on GitHub"
+        }
+
+        t055 = {
+            "fr":"Vérifier que AppimageTool soit bien éxécutable.\nVous pouvez faire la commande :\nchmod +x appimagetool.appimage",
+            "en":"Make sure that AppimageTool is executable.\nYou can do the command:\nchmod +x appimagetool.appimage"
+        }
+
+        t056 = {
+            "fr":"Copier AppimageTool dans le même dossier que EasyCompilePy.\nPuis renomer le extactement 'appimagetool.appimage'.",
+            "en":"Copy AppimageTool in the same folder as EasyCompilePy.\nThen rename it exactly 'appimagetool.appimage'."
+        }
+
+        t057 = {
+            "fr":"Fermer",
+            "en":"Close"
+        }
+
+        t058 = {
+            "fr":"Redémarer EasyCompilePy",
+            "en":"Restart EasyCompilePy"
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -540,6 +610,55 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     deb_ok = True
 
                 elif compile_type == text_type_of_compile["appimage"]:       # make a appimage
+                    
+                    if not pathlib.Path("appimagetool.appimage").is_file():
+                        install_appimagetool = messagebox.askyesno(title=Trad.t045[language], message=Trad.t046[language], detail=Trad.t047[language], icon="warning")
+
+                        if install_appimagetool:
+                            automatic_install = messagebox.askyesno(title=Trad.t048[language], message=Trad.t049[language], detail=Trad.t050[language])
+
+                            if automatic_install:
+                                pass
+                            else:
+                                window_manual_install_appimage = tk.Toplevel(window_easy_compile)
+                                window_manual_install_appimage.title(Trad.t051[language])
+
+                                step = [
+                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "1"),
+                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "2"),
+                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "3"),
+                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "4")
+                                ]
+
+                                text = [
+                                    tk.Label(step[0], text=Trad.t053[language]),
+                                    tk.Label(step[1], text=Trad.t055[language]),
+                                    tk.Label(step[2], text=Trad.t056[language]),
+                                    tk.Label(step[3], text=Trad.t058[language])
+                                ]
+
+                                for frame in step:
+                                    frame.pack()
+                                for label in text:
+                                    label.pack()
+                                
+                                button_step_0 = tk.Button(step[0], text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
+
+                                button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
+                                
+                                window_manual_install_appimage.grab_set()
+                                window_manual_install_appimage.wait_window()
+
+                                window_easy_compile.destroy()
+                                return
+                                
+
+
+                        else:
+                            window_easy_compile.destroy()
+                            return
+                    
+                    
                     try: shutil.rmtree("./dist/Easycompile.AppDir")
                     except: pass
 
