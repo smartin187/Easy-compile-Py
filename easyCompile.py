@@ -256,6 +256,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Appimage",
             "en":"Appimage"
         }
+
+        t044 = {
+            "fr":"Nom de l'appimage :",
+            "en":"Appimage name:"
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -297,7 +302,7 @@ Type={}
 Categories={};""",
     "AppRun":'''#!/bin/bash
 
-exec "$APPDIR/usr/bin/test" "$@"'''
+exec "$APPDIR/usr/bin/{}" "$@"'''
     }
     
     def save_compile(extention_compile_save=".exe"):
@@ -534,8 +539,20 @@ exec "$APPDIR/usr/bin/test" "$@"'''
 
                     deb_ok = True
 
+                elif compile_type == text_type_of_compile["appimage"]:       # make a appimage
+                    try: shutil.rmtree("./dist/Easycompile.AppDir")
+                    except: pass
 
+                    os.mkdir("./dist/Easycompile.AppDir/usr/bin")
 
+                    file_name = os.path.splitext(os.path.basename(os.path.abspath(file)))[0]
+
+                    shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin/")
+
+                    # desktop and apprun :
+                    pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format("appname", file_name, "appicon.png", "Application", "Utility"))
+
+                    pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
 
                 window_easy_compile.update()
                 
@@ -780,7 +797,16 @@ exec "$APPDIR/usr/bin/test" "$@"'''
                 frame_config_type = "appimage"
 
                 frame_setting_appimage = make_frame_setting_appimage()
+
+                appimage_column_0 = tk.Frame(frame_setting_appimage)
+                appimage_column_0.grid(column=0, row=0)
+
+                appimage_column_1 = tk.Frame(frame_setting_appimage)
+                appimage_column_1.grid(column=1, row=0)
                 
+                text_name_appimage = tk.Label(appimage_column_0, text=Trad.t044[language]).grid(column=0, row=0)
+                entry_name_appimage = tk.Entry(appimage_column_0, width=WITH_ENTRY)
+                entry_name_appimage.grid(column=1, row=0)
 
             elif list_compiling.get() == text_type_of_compile["bin"] :
                 if frame_config_type == "deb":
@@ -789,9 +815,6 @@ exec "$APPDIR/usr/bin/test" "$@"'''
                     frame_setting_appimage.destroy()
                 frame_config_type = "bin"
             
-            print(frame_config_type)
-
-
             try: window_easy_compile.after(UPTATE_GUIT, set_frame_config)
             except: pass
         
