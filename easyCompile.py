@@ -375,6 +375,11 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         return arch_map.get(machine, machine)
 
+    def grab_set_and_wait_window(window):
+        """Set wait_window() and grab_set() for the Tk/Toplevel."""
+        window.grab_set()
+        window.wait_window()
+
     CHAR_LIST = {
         "az":["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z"],
         "09":["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -450,8 +455,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         frame_detail.pack()
 
-        window_e.grab_set()
-        window_e.wait_window()
+        grab_set_and_wait_window(window_e)
     
     def compile_message():
         """Set a message one the window of easyCompile for anounce the compile.
@@ -539,8 +543,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     frame_button_compile.pack()
 
-                    window_end_compile.grab_set()
-                    window_end_compile.wait_window()
+                    grab_set_and_wait_window(window_end_compile)
 
                 try:
                     frame_message.destroy()
@@ -680,8 +683,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                                 button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
                                 
-                                window_manual_install_appimage.grab_set()
-                                window_manual_install_appimage.wait_window()
+                                grab_set_and_wait_window(window_manual_install_appimage)
 
                                 window_easy_compile.destroy()
                                 return
@@ -741,8 +743,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 frame_button_compile.pack()
 
-                window_end_compile.grab_set()
-                window_end_compile.wait_window()
+                grab_set_and_wait_window(window_end_compile)
 
             try:
                 frame_message.destroy()
@@ -1050,8 +1051,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 frame_button_error.pack()
 
-                window_error_install.grab_set()
-                window_error_install.wait_window()
+                grab_set_and_wait_window(window_error_install)
 
             try:
                 result = subprocess.run(
@@ -1069,8 +1069,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     window_pyinstaller_install.protocol("WM_DELETE_WINDOW", window_easy_compile.destroy)
 
-                    window_pyinstaller_install.grab_set()
-                    window_pyinstaller_install.wait_window()
+                    grab_set_and_wait_window(window_pyinstaller_install)
                 else:
                     error_install("returncode" + str(result.returncode))
             except Exception as e:
@@ -1107,8 +1106,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
             button_close = tk.Button(window_manual_install, text=Trad.t019[language], command=window_manual_install.destroy).pack()
 
-            window_manual_install.grab_set()
-            window_manual_install.wait_window()
+            grab_set_and_wait_window(window_manual_install)
 
             window_easy_compile.destroy()
 
@@ -1130,12 +1128,10 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         window_no_pyinstaller.protocol("WM_DELETE_WINDOW", window_easy_compile.destroy)
 
-        window_no_pyinstaller.grab_set()
-        window_no_pyinstaller.wait_window()
+        grab_set_and_wait_window(window_no_pyinstaller)
 
     try:
-        window_easy_compile.grab_set()
-        window_easy_compile.wait_window()
+        grab_set_and_wait_window(window_easy_compile)
     except:
         pass
 
