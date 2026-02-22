@@ -7,7 +7,7 @@ This module have the fonction "easyCompile", for easy compile Python.
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 
-import traceback
+from urllib import request
 
 import sys
 import platform
@@ -331,6 +331,21 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Redémarer EasyCompilePy",
             "en":"Restart EasyCompilePy"
         }
+
+        t059 = {
+            "fr":"Désolé, une erreur est survenu lors de l'instalation d'AppimageTool.\nVous pouvez esseyer d'installer manuellement, en suivant le guide.",
+            "en":"Sorry, an error occurred during the installation of AppimageTool.\nYou can try to install manually, following the guide."
+        }
+
+        t060 = {
+            "fr":"Détail : ",
+            "en":"Detail: "
+        }
+
+        t061 = {
+            "fr":"Erreur d'instalation",
+            "en":"Instaltion error"
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -346,6 +361,20 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         
         return arch_map.get(machine, machine)
 
+    def get_appimage_architecture():
+        """Return the architecture name used in appimagetool download URLs."""
+        machine = platform.machine()
+
+        arch_map = {
+            'x86_64': 'x86_64',
+            'aarch64': 'aarch64',
+            'armv7l': 'armhf',
+            'i686': 'i686',
+            'i386': 'i686',
+        }
+
+        return arch_map.get(machine, machine)
+
     CHAR_LIST = {
         "az":["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "x", "y", "z"],
         "09":["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
@@ -353,6 +382,9 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
 
     UPTATE_GUIT = 100
+
+    APPIMAGETOOL_URL = "https://github.com/AppImage/appimagetool/releases/download/1.9.1/appimagetool-{}.AppImage"
+
 
     file_info = {
         "control":"""Package: {}
@@ -618,7 +650,15 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                             automatic_install = messagebox.askyesno(title=Trad.t048[language], message=Trad.t049[language], detail=Trad.t050[language])
 
                             if automatic_install:
-                                pass
+                                try:
+                                    request.urlretrieve(APPIMAGETOOL_URL.format(get_appimage_architecture()), "./appimagetool.appimage")
+                                    subprocess.run(["chmod", "+x", "./appimagetool.appimage"])
+                                    
+                                except Exception as e:
+                                    messagebox.showerror(title=Trad.t061[language], message=Trad.t059[language], detail=Trad.t060[language] + str(e))
+                                    window_easy_compile.destroy()
+                                    return
+
                             else:
                                 window_manual_install_appimage = tk.Toplevel(window_easy_compile)
                                 window_manual_install_appimage.title(Trad.t051[language])
