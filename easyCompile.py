@@ -258,8 +258,8 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         }
 
         t044 = {
-            "fr":"Nom de l'appimage :",
-            "en":"Appimage name:"
+            "fr":"Section de l'appimage :",
+            "en":"Appimage section:"
         }
 
         t045 = {
@@ -402,10 +402,10 @@ Maintainer: {} <{}>
 Description: {}
 """,
         "desktop":"""[Desktop Entry]
-Name={}
+Name=appname
 Exec={}
 Icon={}
-Type={}
+Type=Application
 Categories={};""",
     "AppRun":'''#!/bin/bash
 
@@ -703,7 +703,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin")
 
                     # desktop and apprun :
-                    pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format("appname", file_name, "appicon", "Application", "Utility"))
+                    pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()))
 
                     pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
                     subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"])
@@ -753,7 +753,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                 pass
 
         # -------------------- setting of compile :
-
+        # deb :
         entry_vertion = None
         combobox_section = None
         entry_architecture = None
@@ -762,6 +762,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         entry_description = None
         entry_title = None
         entry_name_one_path = None
+        # appimage :
+        combobox_section_appimage = None
+        
         # ---------
 
 
@@ -806,7 +809,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_setting_appimage = None
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage
             WITH_ENTRY = 15
             # setting for normal compil :
             
@@ -967,9 +970,10 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                 appimage_column_1 = tk.Frame(frame_setting_appimage)
                 appimage_column_1.grid(column=1, row=0)
                 
-                text_name_appimage = tk.Label(appimage_column_0, text=Trad.t044[language]).grid(column=0, row=0)
-                entry_name_appimage = tk.Entry(appimage_column_0, width=WITH_ENTRY)
-                entry_name_appimage.grid(column=1, row=0)
+                text_section_appimage = tk.Label(appimage_column_0, text=Trad.t044[language]).grid(column=0, row=0)
+                combobox_section_appimage = ttk.Combobox(appimage_column_0, values=["Utility", "Development", "Graphics", "Office", "Internet", "Multimedia", "System", "Education", "Game"], state="readonly", width=WITH_ENTRY)
+                combobox_section_appimage.current(0)
+                combobox_section_appimage.grid(column=1, row=0)
 
             elif list_compiling.get() == text_type_of_compile["bin"] :
                 if frame_config_type == "deb":
