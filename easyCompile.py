@@ -414,7 +414,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         
         new_executable_file = filedialog.asksaveasfilename(
                                                             title=Trad.t029[language],
-                                                            filetypes=[(text_type_of_compile["exe" if extention_compile_save==".exe" else "bin"], "*" + extention_compile_save)],
+                                                            filetypes=[(text_type_of_compile["exe" if extention_compile_save==".exe" else "bin" if extention_compile_save=="" else "deb" if extention_compile_save==".deb" else "appimage"], "*" + extention_compile_save)],
                                                         )
         
         if isinstance(new_executable_file, tuple):
