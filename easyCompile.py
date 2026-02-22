@@ -12,7 +12,7 @@ from urllib import request
 import sys
 import platform
 import subprocess
-
+from PIL import Image
 import webbrowser
 
 import shutil
@@ -692,26 +692,32 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                 window_easy_compile.destroy()
                                 return
                                 
-
-
                         else:
                             window_easy_compile.destroy()
                             return
                     
                     
-                    try: shutil.rmtree("./dist/Easycompile.AppDir")
+                    try: shutil.rmtree("./dist/easycompile.AppDir")
                     except: pass
 
-                    os.mkdir("./dist/Easycompile.AppDir/usr/bin")
+                    os.makedirs("./dist/easycompile.AppDir/usr/bin")
 
                     file_name = os.path.splitext(os.path.basename(os.path.abspath(file)))[0]
 
-                    shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin/")
+                    shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin")
 
                     # desktop and apprun :
-                    pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format("appname", file_name, "appicon.png", "Application", "Utility"))
+                    pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format("appname", file_name, "appicon", "Application", "Utility"))
 
                     pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
+                    subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"])
+
+                    # make the icon :
+                    icon = Image.new("RGB", (256,256), color="white")
+                    icon.save("./dist/easycompile.AppDir/appicon.png", "png")
+
+                    subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"])
+
 
                 window_easy_compile.update()
                 
