@@ -409,13 +409,6 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
     
     def save_compile(extention_compile_save=".exe"):
         """Save the compile (copy the executable)"""
-
-        """# get the executable file :
-        
-        parent_dir = os.path.dirname(source_file)
-        
-        executable_file = os.path.join(parent_dir, "dist", file_name + extention_compile_save)
-        """
         source_file = os.path.abspath(file)
         file_name = os.path.splitext(os.path.basename(source_file))[0]
         
@@ -593,6 +586,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
             compile_ok = False
             deb_ok = False
+            appimage_ok = False
 
             window_easy_compile.update()
 
@@ -718,6 +712,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"])
 
+                    shutil.move(f"./appname-{get_appimage_architecture()}.AppImage", f"./dist/{file_name}.AppImage")
+
+                    appimage_ok = True
 
                 window_easy_compile.update()
                 
@@ -737,7 +734,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 frame_button_compile = tk.Frame(window_end_compile)
 
-                button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else "")).grid(column=0, row=0)
+                button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
 
                 button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
