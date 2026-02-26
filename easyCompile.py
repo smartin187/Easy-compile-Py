@@ -346,6 +346,31 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Erreur d'instalation",
             "en":"Instaltion error"
         }
+
+        t062 = {
+            "fr":"Icon de l'AppImage :",
+            "en":"AppImage icon:"
+        }
+
+        t063 = {
+            "fr":"Définire l'icon",
+            "en":"Set icon"
+        }
+
+        t064 = {
+            "fr":"Importer un icon",
+            "en":"Import an icon"
+        }
+
+        t065 = {
+            "fr":"Choisiser un icon en PNG.",
+            "en":"Choos an PNG icon."
+        }
+
+        t066 = {
+            "fr":"Veiller ne pas déplacer/renomer l'image séléctionner...",
+            "en":"Please do not move/rename the selected image..."
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -708,9 +733,13 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
                     subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"])
 
-                    # make the icon :
-                    icon = Image.new("RGB", (256,256), color="white")
-                    icon.save("./dist/easycompile.AppDir/appicon.png", "png")
+                    path_icon = string_var_path_icon_appimage.get()
+                    if path_icon == "[No icon]":
+                        # make the icon :
+                        icon = Image.new("RGB", (256,256), color="white")
+                        icon.save("./dist/easycompile.AppDir/appicon.png", "png")
+                    else:
+                        shutil.move(path_icon, "./dist/easycompile.AppDir/appicon.png")
 
                     subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"])
 
@@ -764,7 +793,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         entry_name_one_path = None
         # appimage :
         combobox_section_appimage = None
-        
+        string_var_path_icon_appimage = None
         # ---------
 
 
@@ -809,7 +838,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_setting_appimage = None
 
         def set_frame_config():
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage, string_var_path_icon_appimage
             WITH_ENTRY = 15
             # setting for normal compil :
             
@@ -974,6 +1003,28 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                 combobox_section_appimage = ttk.Combobox(appimage_column_0, values=["Utility", "Development", "Graphics", "Office", "Internet", "Multimedia", "System", "Education", "Game"], state="readonly", width=WITH_ENTRY)
                 combobox_section_appimage.current(0)
                 combobox_section_appimage.grid(column=1, row=0)
+
+                text_icon_appimage = tk.Label(appimage_column_0, text=Trad.t062[language]).grid(column=0, row=1)
+                
+                def set_icon():
+                    """Open an icon in png for the appimage"""
+                    messagebox.showinfo(title=Trad.t064[language], message=Trad.t065[language], detail=Trad.t066[language])
+
+                    path = filedialog.askopenfilename(filetypes=[("Portable Netowrk Graphic","*.png")])
+
+                    if isinstance(path, tuple):
+                        path = path[0]
+                    
+                    if path != "":
+                        string_var_path_icon_appimage.set(path)
+
+                button_icon = tk.Button(appimage_column_0, text=Trad.t063[language], command=set_icon).grid(column=1, row=1)
+
+                string_var_path_icon_appimage = tk.StringVar(appimage_column_0, value="[No icon]")
+                text_path_icon_appimage = tk.Label(appimage_column_0, textvariable=string_var_path_icon_appimage, font=("Arial", 7), state="disabled").grid(column=0, row=2, columnspan=2)
+                
+                
+
 
             elif list_compiling.get() == text_type_of_compile["bin"] :
                 if frame_config_type == "deb":
