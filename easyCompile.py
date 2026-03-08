@@ -426,6 +426,43 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"L'instalation de Wine est terminer.\nRedémarer Easy Compile Py pour l'utiliser...",
             "en":"The installation of Wine is complete.\nRestart Easy Compile Py to use it..."
         }
+
+        t078 = {
+            "fr":"Guide d'instalation de Wine",
+            "en":"Wine installation guide"
+        }
+
+        t079 = {
+            "fr":"Suiver le guide pour installer Wine :",
+            "en":"Follow the guide to install Wine:"
+        }
+
+        t080 = {
+            "fr":"Ecriver dans votre terminale la commande :\napt install wine\n\nSi vous n'êtes pas sur Debian ou un dérivé, vous devez adapté la commande...\n\nAttention : si vous avez un processeur ARM, il est recommander d'installer Box86...",
+            "en":"Write in your terminal the command:\napt install wine\n\nIf you are not on Debian or a derivative, you must adapt the command...\n\nWarning: if you have an ARM processor, it is recommended to install Box86..."
+        }
+
+        t081 = {
+            "fr":"Ecriver dans votre terminale la commande :\nwinecfg\nUne fênetre s'ouvre pour paramétrer Wine.\nIl pourra vous être demander d'installer Mono, accepter l'installation...\nNoter que la première vois que vous faite cette commande, cela peut prendre du temps...",
+            "en":"Write in your terminal the command:\nwinecfg\nA window opens to configure Wine.\nYou may be asked to install Mono, accept the installation...\nNote that the first time you run this command, it may take some time..."
+        }
+
+        t082 = {
+            "fr":"Redémarer Easy Compile Py.",
+            "en":"Restart Easy Compile Py."
+        }
+
+        t083 = {
+            "fr":"Etape : {}",
+            "en":"Step: {}"
+        }
+
+        t084 = {
+            "fr":"Quitter",
+            "en":"Close"
+        }
+
+
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -654,6 +691,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                             if automatique_install:
                                 try:
                                     result_install = subprocess.run(["sudo", "apt", "install", "wine"], capture_output=True, text=True)
+                                    result_install = subprocess.run(["winecfg"], capture_output=True, text=True)
                                     if result_install.returncode != 0:
                                         raise Exception("returncode : " + str(result_install.returncode))
                                     
@@ -665,6 +703,32 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                     messagebox.showinfo(title=Trad.t073[language], message=Trad.t077[language])
                                     window_easy_compile.destroy()
                                     return
+                            else:
+                                window_manual_install_wine = tk.Toplevel()
+                                window_manual_install_wine.title(Trad.t078[language])
+
+                                text_info = tk.Label(window_manual_install_wine, text=Trad.t079[language]).pack()
+
+                                step = [
+                                    Trad.t080[language],
+                                    Trad.t081[language],
+                                    Trad.t082[language]
+                                ]
+
+                                
+
+                                for i in range(1, 4):
+                                    frame_tmp = tk.LabelFrame(window_manual_install_wine, text=Trad.t083[language].format(str(i)))
+                                    text_tmp = tk.Label(frame_tmp, text=step[i-1]).pack()
+                                    frame_tmp.pack()
+
+                                button_close_guide = tk.Button(window_manual_install_wine, text=Trad.t084[language], command=window_manual_install_wine.destroy).pack()
+
+                                grab_set_and_wait_window(window_manual_install_wine)
+
+                                window_easy_compile.destroy()
+                                return
+
 
                         else:
                             window_easy_compile.destroy()
