@@ -386,6 +386,46 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Wine est une application libre pour exécuté des programme Windows sur Linux.\nLa compilation fonctionne dans la majorité des cas, mais il peut y avoir des erreurs...\nTester toujour l'éxécutable Windows...\nLa compilation peut durée longtemps (même pour de petit script).",
             "en":"Wine is a free application to run Windows programs on Linux.\nThe compilation works in most cases, but there may be errors...\nAlways test the Windows executable...\nThe compilation can take a long time (even for small scripts)."
         }
+
+        t070 = {
+            "fr":"Wine n'est pas installer",
+            "en":"Wine is not install"
+        }
+
+        t071 = {
+            "fr":"Wine n'est pas installer ou a rencontrer une erreur.",
+            "en":"Wine is not installed or has encountered an error."
+        }
+
+        t072 = {
+            "fr":"Voulez vous installer Wine ?",
+            "en":"Do you want to install Wine?"
+        }
+
+        t073 = {
+            "fr":"Installation de Wine",
+            "en":"Wine installation"
+        }
+
+        t074 = {
+            "fr":"Shouaiter vous installer Wine automatiquement ?",
+            "en":"Do you want to install Wine automatically?"
+        }
+
+        t075 = {
+            "fr":"Erreur d'instalation",
+            "en":"Install error"
+        }
+
+        t076 = {
+            "fr":"Désolé, une erreur est arrivé lors de l'installation de Wine.\nVeuiller faire l'installation automatiquement.\nSi votre distribution Linux n'est pas un dérivé de Debian, faite l'instalation manuelle...",
+            "en":"Sorry, an error occurred during the installation of Wine.\nPlease do the automatic installation.\nIf your Linux distribution is not a Debian derivative, do the manual installation..."
+        }
+
+        t077 = {
+            "fr":"L'instalation de Wine est terminer.\nRedémarer Easy Compile Py pour l'utiliser...",
+            "en":"The installation of Wine is complete.\nRestart Easy Compile Py to use it..."
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -598,7 +638,42 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
             elif os_name == "linux":
                 if compile_type == text_type_of_compile["exe"]:
                     messagebox.showinfo(title=Trad.t067[language], message=Trad.t068[language], detail=Trad.t069[language])
+                    try:
+                        result = subprocess.run(["wine", "--version"], capture_output=True, text=True)
+                    except:
+                        class result_error:
+                            returncode = 1
+                        result = result_error()
+
+                    if result.returncode != 0:
+                        install_wine = messagebox.askyesno(title=Trad.t070[language], message=Trad.t071[language], detail=Trad.t072[language])
+
+                        if install_wine:
+                            automatique_install = messagebox.askyesno(title=Trad.t073[language], message=Trad.t074[language])
+
+                            if automatique_install:
+                                try:
+                                    result_install = subprocess.run(["sudo", "apt", "install", "wine"], capture_output=True, text=True)
+                                    if result_install.returncode != 0:
+                                        raise Exception("returncode : " + str(result_install.returncode))
+                                    
+                                except Exception as e:
+                                    messagebox.showerror(title=Trad.t075[language], message=Trad.t076[language], detail=str(e))
+                                    window_easy_compile.destroy()
+                                    return
+                                else:
+                                    messagebox.showinfo(title=Trad.t073[language], message=Trad.t077[language])
+                                    window_easy_compile.destroy()
+                                    return
+
+                        else:
+                            window_easy_compile.destroy()
+                            return
+
                     
+                        
+
+
                     disabeled_window(window_easy_compile, "disabled")
 
                     frame_message = compile_message()
