@@ -371,6 +371,21 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "fr":"Veiller ne pas déplacer/renomer l'image séléctionner...",
             "en":"Please do not move/rename the selected image..."
         }
+
+        t067 = {
+            "fr":"Compilation avec Wine",
+            "en":"Compilation with Wine"
+        }
+
+        t068 = {
+            "fr":"Vous ête sous Linux. Easy Compile Py permet de compiller vers Window en utilisant Wine.",
+            "en":"You are on Linux. Easy Compile Py allows you to compile for Windows using Wine."
+        }
+
+        t069 = {
+            "fr":"Wine est une application libre pour exécuté des programme Windows sur Linux.\nLa compilation fonctionne dans la majorité des cas, mais il peut y avoir des erreurs...\nTester toujour l'éxécutable Windows...\nLa compilation peut durée longtemps (même pour de petit script).",
+            "en":"Wine is a free application to run Windows programs on Linux.\nThe compilation works in most cases, but there may be errors...\nAlways test the Windows executable...\nThe compilation can take a long time (even for small scripts)."
+        }
     
     def get_debian_architecture():
         """Return the architecture"""
@@ -527,55 +542,111 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
             """Lauche the compile for windows"""
             compile_type = list_compiling.get()
 
-            if compile_type == text_type_of_compile["exe"]:
-                disabeled_window(window_easy_compile, "disabled")
+            if os_name == "win32":
 
-                frame_message = compile_message()
+                if compile_type == text_type_of_compile["exe"]:
+                    disabeled_window(window_easy_compile, "disabled")
 
-                compile_ok = False
+                    frame_message = compile_message()
 
-                window_easy_compile.update()
-
-                try:
-                    subprocess.run(
-                            ["pyinstaller", str(file), "--onefile"],
-                            #shell=True,
-                            text=True,
-                        )
-                    
-                    window_easy_compile.update()
-                    
-                    compile_ok = True
-                
-                except Exception as e:
-                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
-
-                    window_easy_compile.update()
                     compile_ok = False
-                
-                if compile_ok :
-                    window_end_compile = tk.Toplevel(window_easy_compile)
-                    window_end_compile.title(Trad.t025[language])
 
-                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+                    window_easy_compile.update()
 
-                    frame_button_compile = tk.Frame(window_end_compile)
+                    try:
+                        subprocess.run(
+                                ["pyinstaller", str(file), "--onefile"],
+                                #shell=True,
+                                text=True,
+                            )
+                        
+                        window_easy_compile.update()
+                        
+                        compile_ok = True
+                    
+                    except Exception as e:
+                        window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
 
-                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+                        window_easy_compile.update()
+                        compile_ok = False
+                    
+                    if compile_ok :
+                        window_end_compile = tk.Toplevel(window_easy_compile)
+                        window_end_compile.title(Trad.t025[language])
 
-                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                        text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                        frame_button_compile = tk.Frame(window_end_compile)
+
+                        button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+
+                        button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
-                    frame_button_compile.pack()
+                        frame_button_compile.pack()
 
-                    grab_set_and_wait_window(window_end_compile)
+                        grab_set_and_wait_window(window_end_compile)
 
-                try:
-                    frame_message.destroy()
-                
-                    disabeled_window(window_easy_compile, "normal")
-                except:
-                    pass
+                    try:
+                        frame_message.destroy()
+                    
+                        disabeled_window(window_easy_compile, "normal")
+                    except:
+                        pass
+
+
+            elif os_name == "linux":
+                if compile_type == text_type_of_compile["exe"]:
+                    messagebox.showinfo(title=Trad.t067[language], message=Trad.t068[language], detail=Trad.t069[language])
+                    
+                    disabeled_window(window_easy_compile, "disabled")
+
+                    frame_message = compile_message()
+
+                    compile_ok = False
+
+                    window_easy_compile.update()
+
+                    try:
+                        subprocess.run(
+                                ["wine", "pyinstaller", str(file), "--onefile"],
+                                text=True,
+                            )
+                        
+                        window_easy_compile.update()
+                        
+                        compile_ok = True
+                    
+                    except Exception as e:
+                        window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+
+                        window_easy_compile.update()
+                        compile_ok = False
+                    
+                    if compile_ok :
+                        window_end_compile = tk.Toplevel(window_easy_compile)
+                        window_end_compile.title(Trad.t025[language])
+
+                        text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                        frame_button_compile = tk.Frame(window_end_compile)
+
+                        button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+
+                        button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+
+                        frame_button_compile.pack()
+
+                        grab_set_and_wait_window(window_end_compile)
+
+                    try:
+                        frame_message.destroy()
+                    
+                        disabeled_window(window_easy_compile, "normal")
+                    except:
+                        pass
+
 
         frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
 
@@ -1073,7 +1144,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
     # Window :
     frame_compile_Window = tk.Frame(compile_notebok)
-    compile_notebok.add(frame_compile_Window, text="Window", state="normal" if os_name == "win32" else "disabled")
+    compile_notebok.add(frame_compile_Window, text="Window", state="normal" if os_name == "win32" else "normal")
 
     configure_frame_windows(frame_compile_Window)
 
