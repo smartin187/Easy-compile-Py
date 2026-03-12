@@ -462,8 +462,76 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en":"Close"
         }
 
+        t085 = {
+            "fr":"Erreur WSL",
+            "en":"WSL error"
+        }
 
-    
+        t086 = {
+            "fr":"WSL n'est pas installer...",
+            "en":"WSL is not install..."
+        }
+
+        t087 = {
+            "fr":"Veuiller installer WSL puis redémarer Easy Compile Py...",
+            "en":"Please install WSL then restart Easy Compile Py..."
+        }
+
+        t088 = {
+            "fr":"Pyinstaller dans WSL n'est pas installer.",
+            "en":"Pyinstaller in WSL is not install."
+        }
+
+        t089 = {
+            "fr":"Voulez vous installer Pyinstaller ?",
+            "en":"Do you want to install Pyinstaller ?"
+        }
+
+        t090 = {
+            "fr":"Installation de Pyinstaller",
+            "en":"Pyinstaller setup"
+        }
+
+        t091 = {
+            "fr":"Shouaiter vous installer Pyinstaller automatiquement ?",
+            "en":"Do you want to install Pyinstaller automatically ?"
+        }
+
+        t092 = {
+            "fr":"Si vous shouaiter installer Pyinstaller manuellement, vous aurez un guide pour le faire...",
+            "en":"If you want to install Pyinstaller manually, you will have a guide to do it..."
+        }
+
+        t093 = {
+            "fr":"Erreur d'installation",
+            "en":"Instal error"
+        }
+
+        t094 = {
+            "fr":"Une erreur est arrivé lors de l'installation de Pyinstaller. Faites l'installation manuelle...",
+            "en":"An error occurred when the installation of Pyinstaller. Do the manual installation..."
+        }
+
+        t095 = {
+            "fr":"Détail : ",
+            "en":"Detail: "
+        }
+
+        t096 = {
+            "fr":"Installation manuelle",
+            "en":"Manual installation"
+        }
+
+        t097 = {
+            "fr":"Ouvrer WSL et taper la commande :\npip install pyinstaller\n\nRedémarer Easy Compile Py.",
+            "en":"Open WSL and write the command:\npip install pyinstaller\n\nRestart Easy Compile Py."
+        }
+
+        t098 = {
+            "fr":"Fermer",
+            "en":"Close"
+        }
+
     def get_debian_architecture():
         """Return the architecture"""
         machine = platform.machine()
@@ -820,176 +888,250 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
             disabeled_window(window_easy_compile, "disabled")
 
-            frame_message = compile_message()
+            if os_name == "linux":
 
-            compile_ok = False
-            deb_ok = False
-            appimage_ok = False
+                frame_message = compile_message()
 
-            window_easy_compile.update()
+                compile_ok = False
+                deb_ok = False
+                appimage_ok = False
 
-            try:
-                subprocess.run(
-                        ["pyinstaller", str(file), "--onefile"],
-                        text=True,
-                    )
-                
-                if compile_type == text_type_of_compile["deb"]:     # make a *.deb
-                    # delet and make the folder :
+                window_easy_compile.update()
 
-                    try: shutil.rmtree("./dist/easycompiledeb")
-                    except: pass
-
-                    
-                    os.makedirs("./dist/easycompiledeb", exist_ok=True)
-
-                    os.makedirs("./dist/easycompiledeb/usr/bin", exist_ok=True)
-
-                    os.makedirs("./dist/easycompiledeb/DEBIAN", exist_ok=True)
-
-                    # --------
-
-                    source_file = os.path.abspath(file)
-                    parent_dir = os.path.dirname(source_file)
-                    file_name = os.path.splitext(os.path.basename(source_file))[0]
-
-                    executable_file = os.path.join(parent_dir, "dist", file_name)
-
-                    shutil.move("./dist/" + file_name, "./dist/easycompiledeb/usr/bin/" + entry_name_one_path.get())
-
-                    controle_file = file_info["control"].format(entry_title.get(), entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get())
-
-
-                    pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
-
-                    deb_build_dir = os.path.abspath("./dist")
-
+                try:
                     subprocess.run(
-                        ["dpkg-deb", "--build", "easycompiledeb"],
-                        cwd=deb_build_dir
-                    )
-
-                    shutil.move("./dist/easycompiledeb.deb", "./dist/" + file_name + ".deb")
-
-                    deb_ok = True
-
-                elif compile_type == text_type_of_compile["appimage"]:       # make a appimage
+                            ["pyinstaller", str(file), "--onefile"],
+                            text=True,
+                        )
                     
-                    if not pathlib.Path("appimagetool.appimage").is_file():
-                        install_appimagetool = messagebox.askyesno(title=Trad.t045[language], message=Trad.t046[language], detail=Trad.t047[language], icon="warning")
+                    if compile_type == text_type_of_compile["deb"]:     # make a *.deb
+                        # delet and make the folder :
 
-                        if install_appimagetool:
-                            automatic_install = messagebox.askyesno(title=Trad.t048[language], message=Trad.t049[language], detail=Trad.t050[language])
+                        try: shutil.rmtree("./dist/easycompiledeb")
+                        except: pass
 
-                            if automatic_install:
-                                try:
-                                    request.urlretrieve(APPIMAGETOOL_URL.format(get_appimage_architecture()), "./appimagetool.appimage")
-                                    subprocess.run(["chmod", "+x", "./appimagetool.appimage"])
+                        
+                        os.makedirs("./dist/easycompiledeb", exist_ok=True)
+
+                        os.makedirs("./dist/easycompiledeb/usr/bin", exist_ok=True)
+
+                        os.makedirs("./dist/easycompiledeb/DEBIAN", exist_ok=True)
+
+                        # --------
+
+                        source_file = os.path.abspath(file)
+                        parent_dir = os.path.dirname(source_file)
+                        file_name = os.path.splitext(os.path.basename(source_file))[0]
+
+                        executable_file = os.path.join(parent_dir, "dist", file_name)
+
+                        shutil.move("./dist/" + file_name, "./dist/easycompiledeb/usr/bin/" + entry_name_one_path.get())
+
+                        controle_file = file_info["control"].format(entry_title.get(), entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get())
+
+
+                        pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
+
+                        deb_build_dir = os.path.abspath("./dist")
+
+                        subprocess.run(
+                            ["dpkg-deb", "--build", "easycompiledeb"],
+                            cwd=deb_build_dir
+                        )
+
+                        shutil.move("./dist/easycompiledeb.deb", "./dist/" + file_name + ".deb")
+
+                        deb_ok = True
+
+                    elif compile_type == text_type_of_compile["appimage"]:       # make a appimage
+                        
+                        if not pathlib.Path("appimagetool.appimage").is_file():
+                            install_appimagetool = messagebox.askyesno(title=Trad.t045[language], message=Trad.t046[language], detail=Trad.t047[language], icon="warning")
+
+                            if install_appimagetool:
+                                automatic_install = messagebox.askyesno(title=Trad.t048[language], message=Trad.t049[language], detail=Trad.t050[language])
+
+                                if automatic_install:
+                                    try:
+                                        request.urlretrieve(APPIMAGETOOL_URL.format(get_appimage_architecture()), "./appimagetool.appimage")
+                                        subprocess.run(["chmod", "+x", "./appimagetool.appimage"])
+                                        
+                                    except Exception as e:
+                                        messagebox.showerror(title=Trad.t061[language], message=Trad.t059[language], detail=Trad.t060[language] + str(e))
+                                        window_easy_compile.destroy()
+                                        return
+
+                                else:
+                                    window_manual_install_appimage = tk.Toplevel(window_easy_compile)
+                                    window_manual_install_appimage.title(Trad.t051[language])
+
+                                    step = [
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "1"),
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "2"),
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "3"),
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "4")
+                                    ]
+
+                                    text = [
+                                        tk.Label(step[0], text=Trad.t053[language]),
+                                        tk.Label(step[1], text=Trad.t055[language]),
+                                        tk.Label(step[2], text=Trad.t056[language]),
+                                        tk.Label(step[3], text=Trad.t058[language])
+                                    ]
+
+                                    for frame in step:
+                                        frame.pack()
+                                    for label in text:
+                                        label.pack()
                                     
+                                    button_step_0 = tk.Button(step[0], text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
+
+                                    button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
+                                    
+                                    grab_set_and_wait_window(window_manual_install_appimage)
+
+                                    window_easy_compile.destroy()
+                                    return
+                                    
+                            else:
+                                window_easy_compile.destroy()
+                                return
+                        
+                        
+                        try: shutil.rmtree("./dist/easycompile.AppDir")
+                        except: pass
+
+                        os.makedirs("./dist/easycompile.AppDir/usr/bin")
+
+                        file_name = os.path.splitext(os.path.basename(os.path.abspath(file)))[0]
+
+                        shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin")
+
+                        # desktop and apprun :
+                        pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()))
+
+                        pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
+                        subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"])
+
+                        path_icon = string_var_path_icon_appimage.get()
+                        if path_icon == "[No icon]":
+                            # make the icon :
+                            icon = Image.new("RGB", (256,256), color="white")
+                            icon.save("./dist/easycompile.AppDir/appicon.png", "png")
+                        else:
+                            shutil.move(path_icon, "./dist/easycompile.AppDir/appicon.png")
+
+                        subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"])
+
+                        shutil.move(f"./appname-{get_appimage_architecture()}.AppImage", f"./dist/{file_name}.AppImage")
+
+                        appimage_ok = True
+
+                    window_easy_compile.update()
+                    
+                    compile_ok = True
+                
+                except Exception as e:
+                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+
+                    window_easy_compile.update()
+                    compile_ok = False
+                
+                if compile_ok :
+                    window_end_compile = tk.Toplevel(window_easy_compile)
+                    window_end_compile.title(Trad.t025[language])
+
+                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                    frame_button_compile = tk.Frame(window_end_compile)
+
+                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
+
+                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+
+                    frame_button_compile.pack()
+
+                    grab_set_and_wait_window(window_end_compile)
+
+                try:
+                    frame_message.destroy()
+                
+                    disabeled_window(window_easy_compile, "normal")
+                except:
+                    pass
+            else:       # window
+                frame_message = compile_message()
+
+                compile_ok = False
+                deb_ok = False
+                appimage_ok = False
+
+                window_easy_compile.update()
+
+                try:
+                    result = subprocess.run(["wsl", "--status"], capture_output=True, text=True)
+
+                    if result.returncode!=0:
+                        messagebox.showerror(Trad.t085[language], Trad.t086[language], detail=Trad.t087[language])
+                        window_easy_compile.destroy()
+                        return
+                    
+                    result = subprocess.run(["wsl", "pyinstaller", "-v"], capture_output=True, text=True)
+
+                    if result.returncode!=0:
+                        install_pyinstaller = messagebox.askquestion(Trad.t085[language], Trad.t088[language], detail=Trad.t089[language], icon="error")
+                        
+                        if install_pyinstaller:
+                            automatic_install_pyinstaller = messagebox.askyesno(Trad.t090[language], Trad.t091[language], detail=Trad.t092[language])
+
+
+                            if automatic_install_pyinstaller:
+                                try:
+                                    result = subprocess.run(["wsl", "pip", "install", "pyinstaller"], capture_output=True, text=True)
+
+                                    if result.returncode != 0:
+                                        raise Exception("Error with pip.")
+
+
                                 except Exception as e:
-                                    messagebox.showerror(title=Trad.t061[language], message=Trad.t059[language], detail=Trad.t060[language] + str(e))
+                                    messagebox.showerror(Trad.t093[language], Trad.t094[language], detail=Trad.t095[language] + str(e))
                                     window_easy_compile.destroy()
                                     return
 
                             else:
-                                window_manual_install_appimage = tk.Toplevel(window_easy_compile)
-                                window_manual_install_appimage.title(Trad.t051[language])
+                                window_install_pyinstaller = tk.Toplevel(window_easy_compile)
+                                window_install_pyinstaller.title(Trad.t096[language])
 
-                                step = [
-                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "1"),
-                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "2"),
-                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "3"),
-                                    tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "4")
-                                ]
+                                texte_guide = tk.Label(window_install_pyinstaller, text=Trad.t097[language]).pack()
 
-                                text = [
-                                    tk.Label(step[0], text=Trad.t053[language]),
-                                    tk.Label(step[1], text=Trad.t055[language]),
-                                    tk.Label(step[2], text=Trad.t056[language]),
-                                    tk.Label(step[3], text=Trad.t058[language])
-                                ]
+                                button_close_guide = tk.Button(window_install_pyinstaller, text=Trad.t098[language], command=window_install_pyinstaller.destroy).pack(pady=10)
 
-                                for frame in step:
-                                    frame.pack()
-                                for label in text:
-                                    label.pack()
-                                
-                                button_step_0 = tk.Button(step[0], text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
-
-                                button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
-                                
-                                grab_set_and_wait_window(window_manual_install_appimage)
-
+                                grab_set_and_wait_window(window_install_pyinstaller)
                                 window_easy_compile.destroy()
                                 return
-                                
+
+
                         else:
                             window_easy_compile.destroy()
                             return
                     
                     
-                    try: shutil.rmtree("./dist/easycompile.AppDir")
-                    except: pass
+                    #subprocess.run(["wsl", "pyinstaller", file, "--onefile"], text=True)
 
-                    os.makedirs("./dist/easycompile.AppDir/usr/bin")
+                except Exception as e:
+                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
 
-                    file_name = os.path.splitext(os.path.basename(os.path.abspath(file)))[0]
-
-                    shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin")
-
-                    # desktop and apprun :
-                    pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()))
-
-                    pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
-                    subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"])
-
-                    path_icon = string_var_path_icon_appimage.get()
-                    if path_icon == "[No icon]":
-                        # make the icon :
-                        icon = Image.new("RGB", (256,256), color="white")
-                        icon.save("./dist/easycompile.AppDir/appicon.png", "png")
-                    else:
-                        shutil.move(path_icon, "./dist/easycompile.AppDir/appicon.png")
-
-                    subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"])
-
-                    shutil.move(f"./appname-{get_appimage_architecture()}.AppImage", f"./dist/{file_name}.AppImage")
-
-                    appimage_ok = True
-
-                window_easy_compile.update()
+                    window_easy_compile.update()
+                    compile_ok = False
                 
-                compile_ok = True
-            
-            except Exception as e:
-                window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+                try:
+                    frame_message.destroy()
+                
+                    disabeled_window(window_easy_compile, "normal")
+                except:
+                    pass
 
-                window_easy_compile.update()
-                compile_ok = False
-            
-            if compile_ok :
-                window_end_compile = tk.Toplevel(window_easy_compile)
-                window_end_compile.title(Trad.t025[language])
-
-                text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
-
-                frame_button_compile = tk.Frame(window_end_compile)
-
-                button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
-
-                button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
-
-
-                frame_button_compile.pack()
-
-                grab_set_and_wait_window(window_end_compile)
-
-            try:
-                frame_message.destroy()
-            
-                disabeled_window(window_easy_compile, "normal")
-            except:
-                pass
 
         # -------------------- setting of compile :
         # deb :
@@ -1289,7 +1431,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
     # Linux :
     frame_compile_Linux = tk.Frame(compile_notebok)
-    compile_notebok.add(frame_compile_Linux, text="Linux", state="normal" if os_name == "linux" else "disabled")
+    compile_notebok.add(frame_compile_Linux, text="Linux", state="normal" if os_name == "linux" else "normal")
 
     configure_frame_Linux(frame_compile_Linux)
     
