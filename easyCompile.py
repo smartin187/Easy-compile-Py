@@ -1077,7 +1077,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         window_easy_compile.destroy()
                         return
                     
-                    result = subprocess.run(["wsl", "pyinstaller", "-v"], capture_output=True, text=True)
+                    result = subprocess.run(["wsl", "bash", "-lc", "pyinstaller -v"], capture_output=True, text=True)
 
                     if result.returncode!=0:
                         install_pyinstaller = messagebox.askquestion(Trad.t085[language], Trad.t088[language], detail=Trad.t089[language], icon="error")
@@ -1116,8 +1116,19 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                             window_easy_compile.destroy()
                             return
                     
+                    def path_for_wsl():
+                        """Make the path for use file on WSL"""
+                        path = file[2:len(file)]
+
+                        path = file[2:].replace("\\", "/")
+                        
+                        
+                        return "/mnt/" + file[0].lower() + path
                     
-                    #subprocess.run(["wsl", "pyinstaller", file, "--onefile"], text=True)
+                    subprocess.run(["wsl", "bash", "-lc", f"pyinstaller '{path_for_wsl()}' --onefile"], text=True)
+
+                    if compile_type == text_type_of_compile["bin"]:
+                        compile_ok = True
 
                 except Exception as e:
                     window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
@@ -1125,12 +1136,31 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     window_easy_compile.update()
                     compile_ok = False
                 
+                if compile_ok :
+                    window_end_compile = tk.Toplevel(window_easy_compile)
+                    window_end_compile.title(Trad.t025[language])
+
+                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                    frame_button_compile = tk.Frame(window_end_compile)
+
+                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
+
+                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+
+                    frame_button_compile.pack()
+
+                    grab_set_and_wait_window(window_end_compile)
+
                 try:
                     frame_message.destroy()
                 
                     disabeled_window(window_easy_compile, "normal")
                 except:
                     pass
+                
+                
 
 
         # -------------------- setting of compile :
