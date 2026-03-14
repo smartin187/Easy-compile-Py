@@ -1188,6 +1188,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         shutil.move("dist\\easycompiledeb.deb", "dist\\" + file_name + ".deb")
 
                         deb_ok = True
+                        compile_ok = True
 
                 except Exception as e:
                     window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
