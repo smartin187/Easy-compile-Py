@@ -14,7 +14,7 @@ import platform
 import subprocess
 from PIL import Image
 import webbrowser
-
+import traceback
 import shutil
 
 import os
@@ -538,6 +538,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         
         arch_map = {
             'x86_64': 'amd64',
+            'AMD64': 'amd64',
             'aarch64': 'arm64',
             'armv7l': 'armhf',
             'i686': 'i386',
@@ -1129,9 +1130,69 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     if compile_type == text_type_of_compile["bin"]:
                         compile_ok = True
+                    
+                    elif compile_type == text_type_of_compile["deb"]:     # make a *.deb
+                        # delet and make the folder :
+                        
+                        try: shutil.rmtree("dist\\easycompiledeb")
+                        except: pass
+
+                        
+                        os.makedirs("dist\\easycompiledeb", exist_ok=True)
+
+                        os.makedirs("dist\\easycompiledeb\\usr\\bin", exist_ok=True)
+
+                        os.makedirs("dist\\easycompiledeb\\DEBIAN", exist_ok=True)
+
+                        # --------
+
+                        source_file = os.path.abspath(file)
+                        parent_dir = os.path.dirname(source_file)
+                        file_name = os.path.splitext(os.path.basename(source_file))[0]
+
+                        
+                        shutil.move("dist\\" + file_name, "dist\\easycompiledeb\\usr\\bin\\" + entry_name_one_path.get())
+
+                        controle_file = file_info["control"].format(entry_title.get(), entry_vertion.get(), combobox_section.get(), entry_architecture.get(), entry_name.get(), entry_email.get(), entry_description.get())
+
+
+                        pathlib.Path("dist\\easycompiledeb\\DEBIAN\\control").write_text(controle_file)
+
+                        deb_build_dir = os.path.abspath("\\dist")
+
+                                                
+                        def path_for_deb():
+                            """Return the path for copi the *.deb from WSL to Windows."""
+                            path = os.path.abspath("dist")
+
+
+                            path_linux = path[0].lower() + path[2:len(path)]
+
+                            path_linux = path_linux.replace("\\", "/")
+
+                            return "/mnt/" + path_linux
+                        
+                        def path_for_dpkg():
+                            return path_for_deb() + "/easycompiledeb"
+
+
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r {path_for_dpkg()} ~/"])
+                                                
+                        
+                        subprocess.run(
+                            ["wsl", "bash", "-lc", f"dpkg-deb --build ~/easycompiledeb"]
+                        )
+
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r ~/easycompiledeb.deb {path_for_deb()}"])
+                       
+                        shutil.move("dist\\easycompiledeb.deb", "dist\\" + file_name + ".deb")
+
+                        deb_ok = True
 
                 except Exception as e:
                     window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+
+                    print(traceback.format_exc())
 
                     window_easy_compile.update()
                     compile_ok = False
