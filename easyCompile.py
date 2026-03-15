@@ -723,6 +723,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                 ["pyinstaller", str(file), "--onefile"],
                                 #shell=True,
                                 text=True,
+                                check=True,
                             )
                         
                         window_easy_compile.update()
@@ -778,10 +779,18 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                             if automatique_install:
                                 try:
-                                    result_install = subprocess.run(["sudo", "apt", "install", "wine"], capture_output=True, text=True)
-                                    result_install = subprocess.run(["winecfg"], capture_output=True, text=True)
-                                    if result_install.returncode != 0:
-                                        raise Exception("returncode : " + str(result_install.returncode))
+                                    subprocess.run(
+                                        ["sudo", "apt", "install", "wine"],
+                                        capture_output=True,
+                                        text=True,
+                                        check=True,
+                                    )
+                                    subprocess.run(
+                                        ["winecfg"],
+                                        capture_output=True,
+                                        text=True,
+                                        check=True,
+                                    )
                                     
                                 except Exception as e:
                                     messagebox.showerror(title=Trad.t075[language], message=Trad.t076[language], detail=str(e))
@@ -838,6 +847,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         subprocess.run(
                                 ["wine", "pyinstaller", str(file), "--onefile"],
                                 text=True,
+                                check=True,
                             )
                         
                         window_easy_compile.update()
@@ -922,6 +932,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     subprocess.run(
                             ["pyinstaller", str(file), "--onefile"],
                             text=True,
+                            check=True,
                         )
                     
                     if compile_type == text_type_of_compile["deb"]:     # make a *.deb
@@ -956,7 +967,8 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                         subprocess.run(
                             ["dpkg-deb", "--build", "easycompiledeb"],
-                            cwd=deb_build_dir
+                            cwd=deb_build_dir,
+                            check=True,
                         )
 
                         shutil.move("./dist/easycompiledeb.deb", "./dist/" + file_name + ".deb")
@@ -974,7 +986,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                 if automatic_install:
                                     try:
                                         request.urlretrieve(APPIMAGETOOL_URL.format(get_appimage_architecture()), "./appimagetool.appimage")
-                                        subprocess.run(["chmod", "+x", "./appimagetool.appimage"])
+                                        subprocess.run(["chmod", "+x", "./appimagetool.appimage"], check=True)
                                         
                                     except Exception as e:
                                         messagebox.showerror(title=Trad.t061[language], message=Trad.t059[language], detail=Trad.t060[language] + str(e))
@@ -1031,7 +1043,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()))
 
                         pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
-                        subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"])
+                        subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"], check=True)
 
                         path_icon = string_var_path_icon_appimage.get()
                         if path_icon == "[No icon]":
@@ -1041,7 +1053,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         else:
                             shutil.move(path_icon, "./dist/easycompile.AppDir/appicon.png")
 
-                        subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"])
+                        subprocess.run(["./appimagetool.appimage", "./dist/easycompile.AppDir"], check=True)
 
                         shutil.move(f"./appname-{get_appimage_architecture()}.AppImage", f"./dist/{file_name}.AppImage")
 
@@ -1149,7 +1161,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         
                         return "/mnt/" + file[0].lower() + path
                     
-                    subprocess.run(["wsl", "bash", "-lc", f"pyinstaller '{path_for_wsl()}' --onefile"], text=True)
+                    subprocess.run(["wsl", "bash", "-lc", f"pyinstaller '{path_for_wsl()}' --onefile"], text=True, check=True)
 
                     if compile_type == text_type_of_compile["bin"]:
                         compile_ok = True
@@ -1199,14 +1211,15 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                             return path_for_deb() + "/easycompiledeb"
 
 
-                        subprocess.run(["wsl", "bash", "-lc", f"cp -r {path_for_dpkg()} ~/"])
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r {path_for_dpkg()} ~/"], check=True)
                                                 
                         
                         subprocess.run(
-                            ["wsl", "bash", "-lc", f"dpkg-deb --build ~/easycompiledeb"]
+                            ["wsl", "bash", "-lc", f"dpkg-deb --build ~/easycompiledeb"],
+                            check=True,
                         )
 
-                        subprocess.run(["wsl", "bash", "-lc", f"cp -r ~/easycompiledeb.deb {path_for_deb()}"])
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r ~/easycompiledeb.deb {path_for_deb()}"], check=True)
                        
                         shutil.move("dist\\easycompiledeb.deb", "dist\\" + file_name + ".deb")
 
@@ -1323,15 +1336,15 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                             return "/mnt/" + path_linux
 
-                        subprocess.run(["wsl", "bash", "-lc", f"cp -r {path_for_appimage()} ~/"])
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r {path_for_appimage()} ~/"], check=True)
 
-                        subprocess.run(["wsl", "bash", "-lc", "chmod +x ~/easycompile.AppDir/AppRun"])
-                        subprocess.run(["wsl", "bash", "-lc", f"chmod +x ~/easycompile.AppDir/usr/bin/{os.path.splitext(os.path.basename(file))[0]}"])
+                        subprocess.run(["wsl", "bash", "-lc", "chmod +x ~/easycompile.AppDir/AppRun"], check=True)
+                        subprocess.run(["wsl", "bash", "-lc", f"chmod +x ~/easycompile.AppDir/usr/bin/{os.path.splitext(os.path.basename(file))[0]}"], check=True)
                      
 
-                        subprocess.run(["wsl", "bash", "-lc", "cd ~ && ~/appimagetool.appimage ~/easycompile.AppDir"])
+                        subprocess.run(["wsl", "bash", "-lc", "cd ~ && ~/appimagetool.appimage ~/easycompile.AppDir"], check=True)
 
-                        subprocess.run(["wsl", "bash", "-lc", f"cp -r ~/appname-{get_appimage_architecture()}.AppImage {path_for_linux()}"])
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r ~/appname-{get_appimage_architecture()}.AppImage {path_for_linux()}"], check=True)
 
                         
                         shutil.move(f"dist\\appname-{get_appimage_architecture()}.AppImage", f"dist\\{file_name}.AppImage")
