@@ -532,6 +532,16 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en":"Close"
         }
 
+        t099 = {
+            "fr":"Effectuer toutes ces action dans WSL :",
+            "en":"Perform all these action in WSL:"
+        }
+
+        t100 = {
+            "fr":"Copier AppimageTool dans votre dossier personnel :\n/home/votrenom/  ou  ~/\n\nEt renomer le fichier en exactement 'appimagetool.appimage'.",
+            "en":"Copy AppimageTool in your home folder:\n/home/yourname/  or  ~/\n\nAnd rename the file exactly 'appimagetool.appimage'."
+        }
+
     def get_debian_architecture():
         """Return the architecture"""
         machine = platform.machine()
@@ -553,8 +563,17 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         arch_map = {
             'x86_64': 'x86_64',
+            'AMD64': 'x86_64',
+            'amd64': 'x86_64',
+            'x64': 'x86_64',
+
             'aarch64': 'aarch64',
+            'arm64': 'aarch64',
+            'ARM64': 'aarch64',
+
             'armv7l': 'armhf',
+            'armhf': 'armhf',
+
             'i686': 'i686',
             'i386': 'i686',
         }
@@ -1061,6 +1080,10 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     disabeled_window(window_easy_compile, "normal")
                 except:
                     pass
+
+
+
+
             else:       # window
                 frame_message = compile_message()
 
@@ -1188,6 +1211,132 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         shutil.move("dist\\easycompiledeb.deb", "dist\\" + file_name + ".deb")
 
                         deb_ok = True
+                        compile_ok = True
+                    
+                    elif compile_type == text_type_of_compile["appimage"]:       # make a appimage
+
+                        result = subprocess.run(["wsl", "bash", "-lc", "test -f ~/appimagetool.appimage"])
+                        
+                        if result.returncode != 0:
+                            install_appimagetool = messagebox.askyesno(title=Trad.t045[language], message=Trad.t046[language], detail=Trad.t047[language], icon="warning")
+
+                            if install_appimagetool:
+                                automatic_install = messagebox.askyesno(title=Trad.t048[language], message=Trad.t049[language], detail=Trad.t050[language])
+
+                                if automatic_install:
+                                    try:
+                                        url = APPIMAGETOOL_URL.format(get_appimage_architecture())
+                                        result = subprocess.run(
+                                            ["wsl", "bash", "-lc", f"wget -O ~/appimagetool.appimage '{url}'"],
+                                            capture_output=True,
+                                            text=True,
+                                        )
+
+                                        if result.returncode != 0:
+                                            raise Exception(result.stderr or result.stdout or "wget failed")
+
+                                        result_chmod = subprocess.run(
+                                            ["wsl", "bash", "-lc", "chmod +x ~/appimagetool.appimage"],
+                                            capture_output=True,
+                                            text=True,
+                                        )
+
+                                        if result_chmod.returncode != 0:
+                                            raise Exception(result_chmod.stderr or result_chmod.stdout or "chmod failed")
+                                        
+                                    except Exception as e:
+                                        messagebox.showerror(title=Trad.t061[language], message=Trad.t059[language], detail=Trad.t060[language] + str(e))
+                                        window_easy_compile.destroy()
+                                        return
+
+                                else:
+                                    window_manual_install_appimage = tk.Toplevel(window_easy_compile)
+                                    window_manual_install_appimage.title(Trad.t051[language])
+
+                                    text_info_wsl = tk.Label(window_manual_install_appimage, text=Trad.t099[language]).pack()
+
+                                    step = [
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "1"),
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "2"),
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "3"),
+                                        tk.LabelFrame(window_manual_install_appimage, text=Trad.t052[language] + "4")
+                                    ]
+
+                                    text = [
+                                        tk.Label(step[0], text=Trad.t053[language]),
+                                        tk.Label(step[1], text=Trad.t055[language]),
+                                        tk.Label(step[2], text=Trad.t100[language]),
+                                        tk.Label(step[3], text=Trad.t058[language])
+                                    ]
+
+                                    for frame in step:
+                                        frame.pack()
+                                    for label in text:
+                                        label.pack()
+                                    
+                                    button_step_0 = tk.Button(step[0], text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
+
+                                    button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
+                                    
+                                    grab_set_and_wait_window(window_manual_install_appimage)
+
+                                    window_easy_compile.destroy()
+                                    return
+                                    
+                            else:
+                                window_easy_compile.destroy()
+                                return
+                        
+                        try: shutil.rmtree("dist\\easycompile.AppDir")
+                        except: pass
+
+                        os.makedirs("dist\\easycompile.AppDir\\usr\\bin")
+
+                        file_name = os.path.splitext(os.path.basename(os.path.abspath(file)))[0]
+
+                        shutil.move("dist\\" + file_name, "dist\\easycompile.AppDir\\usr\\bin")
+
+                        # desktop and apprun :
+                        pathlib.Path("dist\\easycompile.AppDir\\easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()), newline="\n")
+
+                        pathlib.Path("dist\\easycompile.AppDir\\AppRun").write_text(file_info["AppRun"].format(file_name), newline="\n")
+
+                        path_icon = string_var_path_icon_appimage.get()
+                        if path_icon == "[No icon]":
+                            # make the icon :
+                            icon = Image.new("RGB", (256,256), color="white")
+                            icon.save("dist\\easycompile.AppDir\\appicon.png", "png")
+                        else:
+                            shutil.move(path_icon, "dist\\easycompile.AppDir\\appicon.png")
+
+                        
+                        def path_for_appimage():
+                            """Return the path for copi the easycompile.AppDir directory from WSL to Windows."""
+                            return path_for_linux() + "/easycompile.AppDir"
+
+                        def path_for_linux():
+                            path = os.path.abspath("dist")
+
+                            path_linux = path[0].lower() + path[2:len(path)]
+
+                            path_linux = path_linux.replace("\\", "/")
+
+                            return "/mnt/" + path_linux
+
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r {path_for_appimage()} ~/"])
+
+                        subprocess.run(["wsl", "bash", "-lc", "chmod +x ~/easycompile.AppDir/AppRun"])
+                        subprocess.run(["wsl", "bash", "-lc", f"chmod +x ~/easycompile.AppDir/usr/bin/{os.path.splitext(os.path.basename(file))[0]}"])
+                     
+
+                        subprocess.run(["wsl", "bash", "-lc", "cd ~ && ~/appimagetool.appimage ~/easycompile.AppDir"])
+
+                        subprocess.run(["wsl", "bash", "-lc", f"cp -r ~/appname-{get_appimage_architecture()}.AppImage {path_for_linux()}"])
+
+                        
+                        shutil.move(f"dist\\appname-{get_appimage_architecture()}.AppImage", f"dist\\{file_name}.AppImage")
+
+                        appimage_ok = True
                         compile_ok = True
 
                 except Exception as e:
