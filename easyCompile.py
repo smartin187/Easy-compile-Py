@@ -721,7 +721,6 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     try:
                         subprocess.run(
                                 ["pyinstaller", str(file), "--onefile"],
-                                #shell=True,
                                 text=True,
                                 check=True,
                             )
