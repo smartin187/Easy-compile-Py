@@ -38,7 +38,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         """The traduction for easyCompile.
         Example : {"fr":"aa", "en":"aa"}
         """
-        def t999(nuber):
+        def t999(nuber) -> dict:
             """Special trad"""
             nuber = str(nuber)
             return {
@@ -546,7 +546,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
             "en":"Copy AppimageTool in your home folder:\n/home/yourname/  or  ~/\n\nAnd rename the file exactly 'appimagetool.appimage'."
         }
 
-    def get_debian_architecture():
+    def get_debian_architecture() -> str:
         """Return the architecture"""
         machine = platform.machine()
         
@@ -561,7 +561,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         
         return arch_map.get(machine, machine)
 
-    def get_appimage_architecture():
+    def get_appimage_architecture() -> str:
         """Return the architecture name used in appimagetool download URLs."""
         machine = platform.machine()
 
@@ -666,7 +666,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         grab_set_and_wait_window(window_e)
     
-    def compile_message():
+    def compile_message() -> tk.LabelFrame:
         """Set a message one the window of easyCompile for anounce the compile.
         return the frame of message"""
 
@@ -1155,7 +1155,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                             window_easy_compile.destroy()
                             return
                     
-                    def path_for_wsl():
+                    def path_for_wsl() -> str:
                         """Make the path for use file on WSL"""
                         path = file[2:len(file)]
 
@@ -1199,7 +1199,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         deb_build_dir = os.path.abspath("\\dist")
 
                                                 
-                        def path_for_deb():
+                        def path_for_deb() -> str:
                             """Return the path for copi the *.deb from WSL to Windows."""
                             path = os.path.abspath("dist")
 
@@ -1210,7 +1210,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                             return "/mnt/" + path_linux
                         
-                        def path_for_dpkg():
+                        def path_for_dpkg() -> str:
                             return path_for_deb() + "/easycompiledeb"
 
 
@@ -1326,11 +1326,11 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                             shutil.move(path_icon, "dist\\easycompile.AppDir\\appicon.png")
 
                         
-                        def path_for_appimage():
+                        def path_for_appimage() -> str:
                             """Return the path for copi the easycompile.AppDir directory from WSL to Windows."""
                             return path_for_linux() + "/easycompile.AppDir"
 
-                        def path_for_linux():
+                        def path_for_linux() -> str:
                             path = os.path.abspath("dist")
 
                             path_linux = path[0].lower() + path[2:len(path)]
@@ -1431,13 +1431,13 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_setting_deb_1 = tk.Frame(frame_config_compile)
         frame_setting_deb_1.grid(column=0, row=1)
 
-        def make_frame_setting_deb():
+        def make_frame_setting_deb() -> tk.LabelFrame:
             """Returne the frame setting deb"""
 
             frame_setting_deb = tk.LabelFrame(frame_setting_deb_1, text=Trad.t034[language])
             frame_setting_deb.grid(column=0, row=0)
             return frame_setting_deb
-        def make_frame_setting_appimage():
+        def make_frame_setting_appimage() -> tk.LabelFrame:
             """Return the frame setting appimage"""
             frame_setting_appimage = tk.LabelFrame(frame_setting_deb_1, text=Trad.t043[language])
             frame_setting_appimage.grid(column=0, row=0)
@@ -1510,7 +1510,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 def control_config():
                     """if the debian config is bad, the compilation is disabled."""
-                    def vertion_ok(vertion:str):
+                    def vertion_ok(vertion:str) -> bool:
                         """Return True if the vertion is good, False else"""
                         for char in vertion:
                             if (not(char in CHAR_LIST["09"])) and (char != "."):
@@ -1518,7 +1518,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         
                         return True
                     
-                    def title_ok(title:str):
+                    def title_ok(title:str) -> bool:
                         """Return True if the title is good, False else"""
                         for char in title:
                             if (char not in CHAR_LIST["09"]) and (char not in CHAR_LIST["az"]) and (char not in "-+."):
@@ -1526,7 +1526,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         
                         return True
 
-                    def name_path_ok(name_path):
+                    def name_path_ok(name_path) -> bool:
                         """Retunr True if the name is good, False else"""
                         for char in name_path:
                             if (char not in CHAR_LIST["09"]) and (char not in CHAR_LIST["az"]) and (char != "_"):
