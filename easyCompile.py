@@ -743,9 +743,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                         frame_button_compile = tk.Frame(window_end_compile)
 
-                        button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+                        button_save = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
 
-                        button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                        button_cancel = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
                         frame_button_compile.pack()
@@ -818,7 +818,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                     text_tmp = tk.Label(frame_tmp, text=step[i-1]).pack()
                                     frame_tmp.pack()
 
-                                button_close_guide = tk.Button(window_manual_install_wine, text=Trad.t084[language], command=window_manual_install_wine.destroy).pack()
+                                button_close_guide = tk.Button(window_manual_install_wine, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t084[language], command=window_manual_install_wine.destroy).pack()
 
                                 grab_set_and_wait_window(window_manual_install_wine)
 
@@ -867,9 +867,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                         frame_button_compile = tk.Frame(window_end_compile)
 
-                        button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+                        button_save = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
 
-                        button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                        button_cancel = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
                         frame_button_compile.pack()
@@ -904,7 +904,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         frame_compile = tk.LabelFrame(frame, text=Trad.t005[language])
 
-        button_compile = tk.Button(frame_compile, text=Trad.t005[language], command=compile_windows, font=("Arial", 25))
+        button_compile = tk.Button(frame_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t005[language], command=compile_windows, font=("Arial", 25))
         button_compile.pack()
 
         frame_compile.pack()
@@ -1015,9 +1015,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                     for label in text:
                                         label.pack()
                                     
-                                    button_step_0 = tk.Button(step[0], text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
+                                    button_step_0 = tk.Button(step[0], activebackground="#EDEDED", activeforeground="#000000", text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
 
-                                    button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
+                                    button_close = tk.Button(window_manual_install_appimage, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
                                     
                                     grab_set_and_wait_window(window_manual_install_appimage)
 
@@ -1076,9 +1076,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     frame_button_compile = tk.Frame(window_end_compile)
 
-                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
+                    button_save = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
 
-                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                    button_cancel = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
                     frame_button_compile.pack()
@@ -1140,7 +1140,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                                 texte_guide = tk.Label(window_install_pyinstaller, text=Trad.t097[language]).pack()
 
-                                button_close_guide = tk.Button(window_install_pyinstaller, text=Trad.t098[language], command=window_install_pyinstaller.destroy).pack(pady=10)
+                                button_close_guide = tk.Button(window_install_pyinstaller, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t098[language], command=window_install_pyinstaller.destroy).pack(pady=10)
 
                                 grab_set_and_wait_window(window_install_pyinstaller)
                                 window_easy_compile.destroy()
@@ -1286,9 +1286,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                                     for label in text:
                                         label.pack()
                                     
-                                    button_step_0 = tk.Button(step[0], text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
+                                    button_step_0 = tk.Button(step[0], activebackground="#EDEDED", activeforeground="#000000", text=Trad.t054[language], command=lambda: webbrowser.open("https://github.com/AppImage/appimagetool/releases")).pack()
 
-                                    button_close = tk.Button(window_manual_install_appimage, text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
+                                    button_close = tk.Button(window_manual_install_appimage, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t057[language], command=window_manual_install_appimage.destroy).pack(pady=10)
                                     
                                     grab_set_and_wait_window(window_manual_install_appimage)
 
@@ -1367,9 +1367,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     frame_button_compile = tk.Frame(window_end_compile)
 
-                    button_save = tk.Button(frame_button_compile, text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
+                    button_save = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t027[language], command=lambda: save_compile(".deb" if deb_ok else ".AppImage" if appimage_ok else "")).grid(column=0, row=0)
 
-                    button_cancel = tk.Button(frame_button_compile, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                    button_cancel = tk.Button(frame_button_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
                     frame_button_compile.pack()
@@ -1623,7 +1623,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     if path != "":
                         string_var_path_icon_appimage.set(path)
 
-                button_icon = tk.Button(appimage_column_0, text=Trad.t063[language], command=set_icon).grid(column=1, row=1)
+                button_icon = tk.Button(appimage_column_0, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t063[language], command=set_icon).grid(column=1, row=1)
 
                 string_var_path_icon_appimage = tk.StringVar(appimage_column_0, value="[No icon]")
                 text_path_icon_appimage = tk.Label(appimage_column_0, textvariable=string_var_path_icon_appimage, font=("Arial", 7), state="disabled").grid(column=0, row=2, columnspan=2)
@@ -1648,7 +1648,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         frame_compile = tk.LabelFrame(frame, text=Trad.t005[language])
 
-        button_compile = tk.Button(frame_compile, text=Trad.t005[language], command=compile_Linux, font=("Arial", 25))
+        button_compile = tk.Button(frame_compile, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t005[language], command=compile_Linux, font=("Arial", 25))
         button_compile.pack()
 
         frame_compile.pack()
@@ -1706,8 +1706,8 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 frame_button_error = tk.Frame(window_error_install)
 
-                #button_python = tk.Button(frame_button_error, text=Trad.t018[language], command=open_python_on_webbrowser).grid(column=0, row=0)
-                button_close = tk.Button(frame_button_error, text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                #button_python = tk.Button(frame_button_error, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t018[language], command=open_python_on_webbrowser).grid(column=0, row=0)
+                button_close = tk.Button(frame_button_error, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
                 frame_button_error.pack()
 
@@ -1725,7 +1725,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                     texte_info = tk.Label(window_pyinstaller_install, text=Trad.t014[language]).pack()
 
-                    button_ok = tk.Button(window_pyinstaller_install, text=Trad.t015[language], command=window_easy_compile.destroy).pack()
+                    button_ok = tk.Button(window_pyinstaller_install, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t015[language], command=window_easy_compile.destroy).pack()
 
                     window_pyinstaller_install.protocol("WM_DELETE_WINDOW", window_easy_compile.destroy)
 
@@ -1748,7 +1748,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
             text_install_2 = tk.Label(frame_install_1, text=Trad.t022[language]).pack()
 
-            #button_install_python = tk.Button(frame_install_1, text=Trad.t018[language], command=open_python_on_webbrowser).pack()
+            #button_install_python = tk.Button(frame_install_1, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t018[language], command=open_python_on_webbrowser).pack()
 
             frame_install_1.pack()
 
@@ -1764,7 +1764,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
             frame_install_3.pack()
 
-            button_close = tk.Button(window_manual_install, text=Trad.t019[language], command=window_manual_install.destroy).pack()
+            button_close = tk.Button(window_manual_install, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t019[language], command=window_manual_install.destroy).pack()
 
             grab_set_and_wait_window(window_manual_install)
 
@@ -1778,11 +1778,11 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         frame_button = tk.Frame(window_no_pyinstaller)
 
-        button_automatic_installe = tk.Button(frame_button, text=Trad.t013[language], command=automatic_installe).grid(column=0, row=0)
+        button_automatic_installe = tk.Button(frame_button, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t013[language], command=automatic_installe).grid(column=0, row=0)
 
-        button_manual_intall = tk.Button(frame_button, text=Trad.t020[language], command=manual_install).grid(column=1, row=0)
+        button_manual_intall = tk.Button(frame_button, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t020[language], command=manual_install).grid(column=1, row=0)
 
-        button_close = tk.Button(frame_button, text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=2, row=0)
+        button_close = tk.Button(frame_button, activebackground="#EDEDED", activeforeground="#000000", text=Trad.t019[language], command=window_easy_compile.destroy).grid(column=2, row=0)
 
         frame_button.pack()
 
