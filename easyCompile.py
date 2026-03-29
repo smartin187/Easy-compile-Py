@@ -1672,7 +1672,53 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         raise Exception("No file was given.")
         
     window_easy_compile = tk.Toplevel(window)
+
+    try:
+        window_easy_compile.option_add("*Background", BG)
+        window_easy_compile.option_add("*Foreground", FG)
+        window_easy_compile.option_add("*insertBackground", FG)
+
+        # Buttons (include pressed/active states)
+        window_easy_compile.option_add("*Button.Background", BG)
+        window_easy_compile.option_add("*Button.Foreground", FG)
+        window_easy_compile.option_add("*Button.ActiveBackground", BG)
+        window_easy_compile.option_add("*Button.ActiveForeground", FG)
+
+        # Entries
+        window_easy_compile.option_add("*Entry.Background", BG)
+        window_easy_compile.option_add("*Entry.Foreground", FG)
+        window_easy_compile.option_add("*Entry.DisabledBackground", BG)
+        window_easy_compile.option_add("*Entry.DisabledForeground", FG)
+
+        # Text
+        window_easy_compile.option_add("*Text.Background", BG)
+        window_easy_compile.option_add("*Text.Foreground", FG)
+        window_easy_compile.option_add("*Text.insertBackground", FG)
+
+        # Listbox
+        window_easy_compile.option_add("*Listbox.Background", BG)
+        window_easy_compile.option_add("*Listbox.Foreground", FG)
+        window_easy_compile.option_add("*Listbox.SelectBackground", BG)
+        window_easy_compile.option_add("*Listbox.SelectForeground", FG)
+
+        # Menu
+        window_easy_compile.option_add("*Menu.Background", BG)
+        window_easy_compile.option_add("*Menu.Foreground", FG)
+        window_easy_compile.option_add("*Menu.ActiveBackground", BG)
+        window_easy_compile.option_add("*Menu.ActiveForeground", FG)
+
+        # Label/Frames
+        window_easy_compile.option_add("*Label.Background", BG)
+        window_easy_compile.option_add("*Label.Foreground", FG)
+        window_easy_compile.option_add("*Frame.Background", BG)
+        window_easy_compile.option_add("*Labelframe.Background", BG)
+        window_easy_compile.option_add("*Labelframe.Foreground", FG)
+
+    except Exception:
+        pass
+
     window_easy_compile.title(title)
+    window_easy_compile.configure(bg=BG)
 
     main_frame = tk.Frame(window_easy_compile)
     main_frame.place(x=0, y=0)
