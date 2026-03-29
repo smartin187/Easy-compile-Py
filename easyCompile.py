@@ -23,16 +23,17 @@ import pathlib
 
 os_name = sys.platform
 
-BG = "#EDEDED"
-FG = "#000000"
 
-def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py"):
+
+def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py", color:dict={"BG":"#EDEDED", "FG":"#000000"}):
     """Open an window for compile Python with GUI.
     Argument :
     * window : the Tkinter window
     * file : the file of scrip python
     * title : the title of windows. Defaut is "Easy compile Py".
     """
+    BG = color["BG"]
+    FG = color["FG"]
     class Trad:
         """The traduction for easyCompile.
         Example : {"fr":"aa", "en":"aa"}
