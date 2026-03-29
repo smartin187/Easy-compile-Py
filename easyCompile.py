@@ -21,11 +21,22 @@ import os
 
 import pathlib
 
+from typing import Dict, Optional, Union
+
 os_name = sys.platform
 
 
+TkWindow = Union[tk.Tk, tk.Toplevel]
 
-def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py", color:dict={"BG":"#EDEDED", "FG":"#000000"}) -> None:
+
+
+def easyCompile(
+    window: Optional[TkWindow] = None,
+    file: Optional[str] = None,
+    language: str = "en",
+    title: str = "Easy compile Py",
+    color: Dict[str, str] = {"BG": "#EDEDED", "FG": "#000000"},
+) -> None:
     """Open an window for compile Python with GUI.
     Argument :
     * window : the Tkinter window
@@ -38,7 +49,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
         """The traduction for easyCompile.
         Example : {"fr":"aa", "en":"aa"}
         """
-        def t999(nuber) -> dict:
+        def t999(nuber: Union[int, str]) -> Dict[str, str]:
             """Special trad"""
             nuber = str(nuber)
             return {
@@ -584,7 +595,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         return arch_map.get(machine, machine)
 
-    def grab_set_and_wait_window(window) -> None:
+    def grab_set_and_wait_window(window: TkWindow) -> None:
         """Set wait_window() and grab_set() for the Tk/Toplevel."""
         window.grab_set()
         window.wait_window()
@@ -621,7 +632,7 @@ Categories={};""",
 exec "$APPDIR/usr/bin/{}" "$@"'''
     }
     
-    def save_compile(extention_compile_save=".exe") -> None:
+    def save_compile(extention_compile_save: str = ".exe") -> None:
         """Save the compile (copy the executable)"""
         source_file = os.path.abspath(file)
         file_name = os.path.splitext(os.path.basename(source_file))[0]
@@ -651,7 +662,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
     def open_python_on_webbrowser() -> None:
         webbrowser.open("https://www.python.org/downloads/")
     
-    def window_error(window, title, text, detail) -> None:
+    def window_error(window: TkWindow, title: str, text: str, detail: str) -> None:
         """Open a window error."""
         window_e = tk.Toplevel(window)
         window_e.title(title)
@@ -689,7 +700,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         return frame_message
 
-    def disabeled_window(window, state) -> None:
+    def disabeled_window(window: tk.Misc, state: str) -> None:
         """Disable all windget on the window"""
         for windget in window.winfo_children():
             try:
@@ -705,7 +716,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
             except:
                 pass
 
-    def configure_frame_windows(frame) -> None:
+    def configure_frame_windows(frame: tk.Frame) -> None:
         """Make the frame of the compile for window."""
         def compile_windows():
             """Lauche the compile for windows"""
@@ -913,7 +924,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         frame_compile.pack()
     
-    def configure_frame_Linux(frame) -> None:
+    def configure_frame_Linux(frame: tk.Frame) -> None:
         """Make the frame of the compile for Linux."""
         def compile_Linux():
             """Lauche the compile for Linux"""
@@ -1526,7 +1537,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         
                         return True
 
-                    def name_path_ok(name_path) -> bool:
+                    def name_path_ok(name_path: str) -> bool:
                         """Retunr True if the name is good, False else"""
                         for char in name_path:
                             if (char not in CHAR_LIST["09"]) and (char not in CHAR_LIST["az"]) and (char != "_"):
@@ -1537,13 +1548,13 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     RED = "#FF0000"
                     NORMAL = "#FFFFFF"
                     try:
-                        def field_error(entry) -> None:
+                        def field_error(entry: tk.Entry) -> None:
                             """Set bg of entry to red and disabeled the buton for compile"""
                             nonlocal bad_config
                             entry.configure(bg=RED)
                             bad_config = True
                         
-                        def field_normal(entry) -> None:
+                        def field_normal(entry: tk.Entry) -> None:
                             """Set bg of entry to normal"""
                             entry.configure(bg=NORMAL)
 
@@ -1746,7 +1757,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
     except ImportError:
         def automatic_installe() -> None:
             """Try to install PyInstaller."""
-            def error_install(détail) -> None:
+            def error_install(détail: str) -> None:
                 """Open an error window for an error of automatic install."""
                 window_error_install = tk.Toplevel(window_no_pyinstaller)
                 window_error_install.title(Trad.t016[language])
