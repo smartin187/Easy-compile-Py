@@ -25,7 +25,7 @@ os_name = sys.platform
 
 
 
-def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py", color:dict={"BG":"#EDEDED", "FG":"#000000"}):
+def easyCompile(window:object=None, file:str=None, language:str="en", title:str="Easy compile Py", color:dict={"BG":"#EDEDED", "FG":"#000000"}) -> None:
     """Open an window for compile Python with GUI.
     Argument :
     * window : the Tkinter window
@@ -584,7 +584,7 @@ def easyCompile(window:object=None, file:str=None, language:str="en", title:str=
 
         return arch_map.get(machine, machine)
 
-    def grab_set_and_wait_window(window):
+    def grab_set_and_wait_window(window) -> None:
         """Set wait_window() and grab_set() for the Tk/Toplevel."""
         window.grab_set()
         window.wait_window()
@@ -621,7 +621,7 @@ Categories={};""",
 exec "$APPDIR/usr/bin/{}" "$@"'''
     }
     
-    def save_compile(extention_compile_save=".exe"):
+    def save_compile(extention_compile_save=".exe") -> None:
         """Save the compile (copy the executable)"""
         source_file = os.path.abspath(file)
         file_name = os.path.splitext(os.path.basename(source_file))[0]
@@ -648,10 +648,10 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
             window_easy_compile.destroy()
 
 
-    def open_python_on_webbrowser():
+    def open_python_on_webbrowser() -> None:
         webbrowser.open("https://www.python.org/downloads/")
     
-    def window_error(window, title, text, detail):
+    def window_error(window, title, text, detail) -> None:
         """Open a window error."""
         window_e = tk.Toplevel(window)
         window_e.title(title)
@@ -689,7 +689,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         return frame_message
 
-    def disabeled_window(window, state):
+    def disabeled_window(window, state) -> None:
         """Disable all windget on the window"""
         for windget in window.winfo_children():
             try:
@@ -705,7 +705,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
             except:
                 pass
 
-    def configure_frame_windows(frame):
+    def configure_frame_windows(frame) -> None:
         """Make the frame of the compile for window."""
         def compile_windows():
             """Lauche the compile for windows"""
@@ -913,7 +913,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
         frame_compile.pack()
     
-    def configure_frame_Linux(frame):
+    def configure_frame_Linux(frame) -> None:
         """Make the frame of the compile for Linux."""
         def compile_Linux():
             """Lauche the compile for Linux"""
@@ -1446,7 +1446,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_setting_deb = make_frame_setting_deb()
         frame_setting_appimage = None
 
-        def set_frame_config():
+        def set_frame_config() -> None:
             nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage, string_var_path_icon_appimage
             WITH_ENTRY = 15
             # setting for normal compil :
@@ -1508,7 +1508,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                 entry_description.grid(column=1, row=3)
                 entry_description.insert(0, "Description of package")
 
-                def control_config():
+                def control_config() -> None:
                     """if the debian config is bad, the compilation is disabled."""
                     def vertion_ok(vertion:str) -> bool:
                         """Return True if the vertion is good, False else"""
@@ -1537,13 +1537,13 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     RED = "#FF0000"
                     NORMAL = "#FFFFFF"
                     try:
-                        def field_error(entry):
+                        def field_error(entry) -> None:
                             """Set bg of entry to red and disabeled the buton for compile"""
                             nonlocal bad_config
                             entry.configure(bg=RED)
                             bad_config = True
                         
-                        def field_normal(entry):
+                        def field_normal(entry) -> None:
                             """Set bg of entry to normal"""
                             entry.configure(bg=NORMAL)
 
@@ -1615,7 +1615,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 text_icon_appimage = tk.Label(appimage_column_0, text=Trad.t062[language]).grid(column=0, row=1)
                 
-                def set_icon():
+                def set_icon() -> None:
                     """Open an icon in png for the appimage"""
                     messagebox.showinfo(title=Trad.t064[language], message=Trad.t065[language], detail=Trad.t066[language])
 
@@ -1744,9 +1744,9 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
     try:
         import PyInstaller.__main__
     except ImportError:
-        def automatic_installe():
+        def automatic_installe() -> None:
             """Try to install PyInstaller."""
-            def error_install(détail):
+            def error_install(détail) -> None:
                 """Open an error window for an error of automatic install."""
                 window_error_install = tk.Toplevel(window_no_pyinstaller)
                 window_error_install.title(Trad.t016[language])
@@ -1785,7 +1785,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
             except Exception as e:
                 error_install(str(e))
 
-        def manual_install():
+        def manual_install() -> None:
             """Open an window for an manual install."""
             window_no_pyinstaller.destroy()
 

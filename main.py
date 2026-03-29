@@ -38,7 +38,7 @@ if __name__ == "__main__":
     main_window = tk.Tk()
     main_window.title(trad_002[language])
 
-    def open():
+    def open() -> None:
         """Open a file and open the window for compile"""
         file = filedialog.askopenfilename(
                                         title=trad_001[language],
@@ -57,12 +57,12 @@ if __name__ == "__main__":
 
     set_language = None
 
-    def validate_setting():
+    def validate_setting() -> None:
         """Write the setting one the file and destroy the setting frame."""
         Path("Setting.txt", encoding="UTF-8").write_text("{'language':'" + set_language.get() + "'}")
         frame_setting.destroy()
 
-    def setting():
+    def setting() -> None:
         """Destroy the setting button and set the setting frame."""
         global set_language
         button_setting.destroy()
