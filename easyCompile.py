@@ -1753,8 +1753,13 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
     # controle de Pyinstaller :
     try:
-        import PyInstaller.__main__
-    except ImportError:
+        print("PyInstaller vertion:")
+        subprocess.run(
+            ["pyinstaller", "-v"],
+            text=True,
+            check=True
+        )
+    except:
         def automatic_installe() -> None:
             """Try to install PyInstaller."""
             def error_install(détail: str) -> None:
