@@ -734,10 +734,18 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                     window_easy_compile.update()
 
                     try:
+                        pyinstaller_env = None
+
+                        if getattr(sys, "frozen", False) or hasattr(sys, "_MEIPASS"):
+                            pyinstaller_env = os.environ.copy()
+                            pyinstaller_env.pop("TCL_LIBRARY", None)
+                            pyinstaller_env.pop("TK_LIBRARY", None)
+
                         subprocess.run(
                                 ["pyinstaller", str(file), "--onefile"],
                                 text=True,
                                 check=True,
+                                env=pyinstaller_env,
                             )
                         
                         window_easy_compile.update()
