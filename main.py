@@ -8,6 +8,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import filedialog
 from pathlib import Path
+from sys import platform
+from os import makedirs
+import os
 
 from easyCompile import easyCompile
 
@@ -21,19 +24,27 @@ trad_005 = {"fr":"Paramètres", "en":"Setting"}
 trad_006 = {"fr":"Choisiser la langue...", "en":"Selecte language..."}
 trad_007 = {"fr":"Valider", "en":"Validate"}
 
+path_setting = Path("Setting.txt") if platform == "win32" else Path("~/.config/EasyCompilePy/Setting.txt").expanduser()
+PATH_LINUX = path_setting.parent
+
 
 if __name__ == "__main__":
 
     # open the setting file
     try:
-        file_setting = open("Setting.txt", mode="r", encoding="UTF-8")
+        file_setting = open(path_setting, mode="r", encoding="UTF-8")
 
         dict_setting = ast.literal_eval(file_setting.read())
         language = dict_setting["language"]
 
     except:
-        Path("Setting.txt", encoding="UTF-8").write_text("{'language':'en'}")
+        if platform == "linux" and not os.path.isdir(PATH_LINUX):
+            makedirs(PATH_LINUX, exist_ok=True)
+        Path(path_setting).write_text("{'language':'en'}", encoding="UTF-8")
+        
+
         language="en"
+    
 
     main_window = tk.Tk()
     main_window.title(trad_002[language])
@@ -59,7 +70,7 @@ if __name__ == "__main__":
 
     def validate_setting() -> None:
         """Write the setting one the file and destroy the setting frame."""
-        Path("Setting.txt", encoding="UTF-8").write_text("{'language':'" + set_language.get() + "'}")
+        Path(path_setting).write_text("{'language':'" + set_language.get() + "'}", encoding="UTF-8")
         frame_setting.destroy()
 
     def setting() -> None:
