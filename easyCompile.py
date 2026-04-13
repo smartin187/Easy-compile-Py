@@ -1683,9 +1683,8 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
     }
 
     if window is None:
-        raise Exception("No window was given.")
-    elif file is None:
-        raise Exception("No file was given.")
+        window = tk.Tk()
+        window.withdraw()
         
     window_easy_compile = tk.Toplevel(window)
 

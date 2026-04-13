@@ -60,7 +60,7 @@ if __name__ == "__main__":
         if file != "":
 
             main_window.withdraw()
-            easyCompile(main_window, file, language, color={"BG":"#D8D8D8", "FG":"#000000"})
+            easyCompile(file, main_window, language, color={"BG":"#D8D8D8", "FG":"#000000"})
             main_window.destroy()
         
     text_info = tk.Label(main_window, text=trad_004[language], font=("Arial", 25)).pack()
