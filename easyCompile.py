@@ -26,13 +26,10 @@ from typing import Dict, Optional, Union
 os_name = sys.platform
 
 
-TkWindow = Union[tk.Tk, tk.Toplevel]
-
-
 
 def easyCompile(
-    window: Optional[TkWindow] = None,
-    file: Optional[str] = None,
+    file: str,
+    window: tk.Tk | tk.Toplevel = None,
     language: str = "en",
     title: str = "Easy compile Py",
     color: Dict[str, str] = {"BG": "#EDEDED", "FG": "#000000"},
@@ -595,7 +592,7 @@ def easyCompile(
 
         return arch_map.get(machine, machine)
 
-    def grab_set_and_wait_window(window: TkWindow) -> None:
+    def grab_set_and_wait_window(window: tk.Tk | tk.Toplevel) -> None:
         """Set wait_window() and grab_set() for the Tk/Toplevel."""
         window.grab_set()
         window.wait_window()
@@ -662,7 +659,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
     def open_python_on_webbrowser() -> None:
         webbrowser.open("https://www.python.org/downloads/")
     
-    def window_error(window: TkWindow, title: str, text: str, detail: str) -> None:
+    def window_error(window: tk.Tk | tk.Toplevel, title: str, text: str, detail: str) -> None:
         """Open a window error."""
         window_e = tk.Toplevel(window)
         window_e.title(title)
