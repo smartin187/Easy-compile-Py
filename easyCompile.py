@@ -554,6 +554,11 @@ def easyCompile(
             "en":"Copy AppimageTool in your home folder:\n/home/yourname/  or  ~/\n\nAnd rename the file exactly 'appimagetool.appimage'."
         }
 
+        t101 = {
+            "fr":"Optimisation du bytecode :\nAttention : risque d'erreur au niveau 2 si utilisation de docstring",
+            "en":"Bytecode optimization:\nWarning: risk of error at level 2 if using docstring"
+        }
+
     def get_debian_architecture() -> str:
         """Return the architecture"""
         machine = platform.machine()
@@ -949,7 +954,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                 try:
                     subprocess.run(
-                            ["pyinstaller", str(file), "--onefile"],
+                            ["pyinstaller", "--onefile", f"--optimize={combobox_optimisation.get()}", str(file)],
                             text=True,
                             check=True,
                         )
@@ -1436,8 +1441,14 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_config_compile = tk.LabelFrame(frame, text=Trad.t003[language])
 
         frame_setting_bin = tk.LabelFrame(frame_config_compile, text=Trad.t035[language])
-        # frame setting bin if not used now...
+        
         #text_incon = tk.Label(frame_setting_bin, text=Trad.t033[language]).pack()
+
+        text_optimisation = tk.Label(frame_setting_bin, text=Trad.t101[language]).grid(column=0, row=0)
+
+        combobox_optimisation = ttk.Combobox(frame_setting_bin, values=("0", "1", "2"), state="readonly", width=1)
+        combobox_optimisation.grid(column=1, row=0)
+        combobox_optimisation.current(0)
 
         frame_setting_bin.grid(column=0, row=0)
 
