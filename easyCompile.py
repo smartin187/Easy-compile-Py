@@ -569,6 +569,11 @@ def easyCompile(
             "en":"Your system ({}) is not compatible with easyCompile..."
         }
 
+        t104 = {
+            "fr":"Ajouter au menu principale (via desktop)",
+            "en":"Add to main menu (with desktop)"
+        }
+
     def get_debian_architecture() -> str:
         """Return the architecture"""
         machine = platform.machine()
@@ -996,6 +1001,15 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
 
                         pathlib.Path("./dist/easycompiledeb/DEBIAN/control").write_text(controle_file)
+
+                        if var_check_add_menu.get():
+                            os.makedirs("./dist/easycompiledeb/usr/share/applications")
+
+                            desktop = file_info["desktop"].format(entry_name_one_path.get(), "None", "Development")
+                            
+                            pathlib.Path(f"./dist/easycompiledeb/usr/share/applications/{entry_name_one_path.get()}.desktop").write_text(desktop)
+
+                            
 
                         deb_build_dir = os.path.abspath("./dist")
 
@@ -1431,6 +1445,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         entry_description = None
         entry_title = None
         entry_name_one_path = None
+        var_check_add_menu = None
         # appimage :
         combobox_section_appimage = None
         string_var_path_icon_appimage = None
@@ -1484,7 +1499,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_setting_appimage = None
 
         def set_frame_config() -> None:
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage, string_var_path_icon_appimage
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage, string_var_path_icon_appimage, var_check_add_menu
             WITH_ENTRY = 15
             # setting for normal compil :
             
@@ -1521,6 +1536,12 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                 entry_email = tk.Entry(colum_0, width=WITH_ENTRY)
                 entry_email.grid(column=1, row=3)
                 entry_email.insert(0, "email@email.com")
+
+
+                var_check_add_menu = tk.BooleanVar(colum_0, value=True)
+                
+                check_menu = tk.Checkbutton(colum_0, text=Trad.t104[language], variable=var_check_add_menu)
+                check_menu.grid(column=0, row=4)
 
                 text_architecture = tk.Label(colum_1, text=Trad.t037[language]).grid(column=0, row=0)
                 entry_architecture = tk.Entry(colum_1, width=WITH_ENTRY)
