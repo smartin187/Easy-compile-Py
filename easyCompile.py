@@ -559,6 +559,16 @@ def easyCompile(
             "en":"Bytecode optimization:\nWarning: risk of error at level 2 if using docstring"
         }
 
+        t102 = {
+            "fr":"Erreur de compatibilité",
+            "en":"Compatibility error"
+        }
+
+        t103 = {
+            "fr":"Votre système ({}) n'est pas compatible avec easyCompile...",
+            "en":"Your system ({}) is not compatible with easyCompile..."
+        }
+
     def get_debian_architecture() -> str:
         """Return the architecture"""
         machine = platform.machine()
@@ -1754,13 +1764,15 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
     # Window :
     frame_compile_Window = tk.Frame(compile_notebok)
-    compile_notebok.add(frame_compile_Window, text="Window", state="normal" if os_name == "win32" else "normal")
+    compile_notebok.add(frame_compile_Window, text="Window")
 
     configure_frame_windows(frame_compile_Window)
 
     # Linux :
     frame_compile_Linux = tk.Frame(compile_notebok)
-    compile_notebok.add(frame_compile_Linux, text="Linux", state="normal" if os_name == "linux" else "normal")
+    compile_notebok.add(frame_compile_Linux, text="Linux")
+
+    compile_notebok.select(0 if os_name == "win32" else 1)
 
     configure_frame_Linux(frame_compile_Linux)
     
@@ -1870,6 +1882,11 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         window_no_pyinstaller.protocol("WM_DELETE_WINDOW", window_easy_compile.destroy)
 
         grab_set_and_wait_window(window_no_pyinstaller)
+
+    if os_name not in ("win32", "linux"):
+        messagebox.showerror(Trad.t102[language], Trad.t103[language].format(os_name))
+        window_easy_compile.destroy()
+        return
 
     try:
         grab_set_and_wait_window(window_easy_compile)
