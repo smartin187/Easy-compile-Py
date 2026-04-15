@@ -574,6 +574,11 @@ def easyCompile(
             "en":"Add to main menu (with desktop)"
         }
 
+        t105 = {
+            "fr":"Section :",
+            "en":"Section:"
+        }
+
     def get_debian_architecture() -> str:
         """Return the architecture"""
         machine = platform.machine()
@@ -1005,7 +1010,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         if var_check_add_menu.get():
                             os.makedirs("./dist/easycompiledeb/usr/share/applications")
 
-                            desktop = file_info["desktop"].format(entry_name_one_path.get(), "None", "Development")
+                            desktop = file_info["desktop"].format(entry_name_one_path.get(), "None", combobox_menu.get())
                             
                             pathlib.Path(f"./dist/easycompiledeb/usr/share/applications/{entry_name_one_path.get()}.desktop").write_text(desktop)
 
@@ -1446,6 +1451,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         entry_title = None
         entry_name_one_path = None
         var_check_add_menu = None
+        combobox_menu = None
         # appimage :
         combobox_section_appimage = None
         string_var_path_icon_appimage = None
@@ -1499,7 +1505,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
         frame_setting_appimage = None
 
         def set_frame_config() -> None:
-            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage, string_var_path_icon_appimage, var_check_add_menu
+            nonlocal frame_config_type, frame_setting_deb, entry_vertion, combobox_section, entry_architecture, entry_name, entry_email, entry_description, entry_title, entry_name_one_path, frame_setting_appimage, combobox_section_appimage, string_var_path_icon_appimage, var_check_add_menu, combobox_menu
             WITH_ENTRY = 15
             # setting for normal compil :
             
@@ -1539,10 +1545,20 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
 
                 var_check_add_menu = tk.BooleanVar(colum_0, value=True)
-                
-                check_menu = tk.Checkbutton(colum_0, text=Trad.t104[language], variable=var_check_add_menu)
-                check_menu.grid(column=0, row=4)
 
+                frame_menu = tk.LabelFrame(colum_0)
+                frame_menu.grid(column=0, row=4)
+                
+                check_menu = tk.Checkbutton(frame_menu, text=Trad.t104[language], variable=var_check_add_menu)
+                check_menu.grid(column=0, row=0, columnspan=2)
+
+                text_info_menu = tk.Label(frame_menu, text=Trad.t105[language])
+                text_info_menu.grid(column=0, row=1)
+
+                combobox_menu = ttk.Combobox(frame_menu, values=["Utility", "Development", "Graphics", "Office", "Internet", "Multimedia", "System", "Education", "Game"], state="readonly", width=WITH_ENTRY)
+                combobox_menu.grid(column=1, row=1)
+                combobox_menu.current(0)
+                
                 text_architecture = tk.Label(colum_1, text=Trad.t037[language]).grid(column=0, row=0)
                 entry_architecture = tk.Entry(colum_1, width=WITH_ENTRY)
                 entry_architecture.insert(0, get_debian_architecture())
