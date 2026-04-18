@@ -644,7 +644,7 @@ Maintainer: {} <{}>
 Description: {}
 """,
         "desktop":"""[Desktop Entry]
-Name=appname
+Name={}
 Exec={}
 Icon={}
 Type=Application
@@ -1010,7 +1010,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         if var_check_add_menu.get():
                             os.makedirs("./dist/easycompiledeb/usr/share/applications")
 
-                            desktop = file_info["desktop"].format(entry_name_one_path.get(), "None", combobox_menu.get())
+                            desktop = file_info["desktop"].format(entry_title.get(), entry_name_one_path.get(), "None", combobox_menu.get())
                             
                             pathlib.Path(f"./dist/easycompiledeb/usr/share/applications/{entry_name_one_path.get()}.desktop").write_text(desktop)
 
@@ -1093,7 +1093,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         shutil.move("./dist/" + file_name, "./dist/easycompile.AppDir/usr/bin")
 
                         # desktop and apprun :
-                        pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()))
+                        pathlib.Path("./dist/easycompile.AppDir/easycompile.desktop").write_text(file_info["desktop"].format("appname", file_name, "appicon", combobox_section_appimage.get()))
 
                         pathlib.Path("./dist/easycompile.AppDir/AppRun").write_text(file_info["AppRun"].format(file_name))
                         subprocess.run(["chmod", "+x", "./dist/easycompile.AppDir/AppRun"], check=True)
@@ -1363,7 +1363,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
                         shutil.move("dist\\" + file_name, "dist\\easycompile.AppDir\\usr\\bin")
 
                         # desktop and apprun :
-                        pathlib.Path("dist\\easycompile.AppDir\\easycompile.desktop").write_text(file_info["desktop"].format(file_name, "appicon", combobox_section_appimage.get()), newline="\n")
+                        pathlib.Path("dist\\easycompile.AppDir\\easycompile.desktop").write_text(file_info["desktop"].format("appname", file_name, "appicon", combobox_section_appimage.get()), newline="\n")
 
                         pathlib.Path("dist\\easycompile.AppDir\\AppRun").write_text(file_info["AppRun"].format(file_name), newline="\n")
 
