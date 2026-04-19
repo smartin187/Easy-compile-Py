@@ -982,7 +982,7 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
 
                     subprocess.run(
-                            ["pyinstaller", "--onefile", f"--optimize={combobox_optimisation.get()}", str(file)],
+                            ["pyinstaller", "--onefile", f"--optimize={combobox_optimisation.get()}", "--clean", "--noconfirm", str(file)],
                             text=True,
                             check=True,
                             env=pyinstaller_env
