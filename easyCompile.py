@@ -1257,6 +1257,14 @@ exec "$APPDIR/usr/bin/{}" "$@"'''
 
                         deb_build_dir = os.path.abspath("\\dist")
 
+                        if var_check_add_menu.get():
+                            os.makedirs("dist\\easycompiledeb\\usr\\share\\applications")
+
+                            desktop = file_info["desktop"].format(entry_title.get(), entry_name_one_path.get(), "None", combobox_menu.get())
+                            
+                            pathlib.Path(f"dist\\easycompiledeb\\usr\\share\\applications\\{entry_name_one_path.get()}.desktop").write_text(desktop)
+
+
                                                 
                         def path_for_deb() -> str:
                             """Return the path for copi the *.deb from WSL to Windows."""
