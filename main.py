@@ -49,7 +49,7 @@ if __name__ == "__main__":
     main_window = tk.Tk()
     main_window.title(trad_002[language])
 
-    def open() -> None:
+    def open_script() -> None:
         """Open a file and open the window for compile"""
         file = filedialog.askopenfilename(
                                         title=trad_001[language],
@@ -64,7 +64,7 @@ if __name__ == "__main__":
             main_window.destroy()
         
     text_info = tk.Label(main_window, text=trad_004[language], font=("Arial", 25)).pack()
-    button_open = tk.Button(main_window, text=trad_001[language], command=open, font=("Arial", 35)).pack(pady=20)
+    button_open = tk.Button(main_window, text=trad_001[language], command=open_script, font=("Arial", 35)).pack(pady=20)
 
     set_language = None
 
