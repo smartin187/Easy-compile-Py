@@ -619,6 +619,33 @@ def easyCompile(
             "en":"Unable to install pywin32. Try the manual installation...\nCheck that Python and pip are installed..."
         }
 
+        t114 = {
+            "fr":"Paramètre de l'installateur :",
+            "en":"Installer config:"
+        }
+
+        t115 = {
+            "fr":"Nom de l'application :",
+            "en":"Application name:"
+        }
+
+        t116 = {
+            "fr":"Description de l'application :",
+            "en":"Application description:"
+
+        }
+
+        t117 = {
+            "fr":"Information sur licence :",
+            "en":"Licence information:"
+        }
+
+        t118 = {
+            "fr":"Commande à exécuté lors de l'instalation :\n(lesser vide pour ignorer)",
+            "en":"Command to run during installation:\n(leave empty to ignore)"
+        }
+
+
     def get_debian_architecture() -> str:
         """Return the architecture"""
         machine = platform.machine()
@@ -1370,12 +1397,6 @@ except Exception as e:
                     
                     window_easy_compile.update()
                     
-                    compile_ok = True
-                
-                
-                
-                
-
                     if compile_type == text_type_of_compile["exeinstaller"] :# make installer
                         try:
 
@@ -1395,13 +1416,12 @@ except Exception as e:
 
                             executable_file = os.path.join(parent_dir, "dist", file_name)
 
-                            
                             install_info = str({
-                                "APP_NAME":"name",
+                                "APP_NAME":entry_install_name.get(),
                                 "EXECUTABLE_NAME":file_name,
-                                "INFO":"appinfo",
-                                "LICENCE":"licence",
-                                "COMMAND":"",
+                                "INFO":text_install_info.get(0.0, tk.END),
+                                "LICENCE":text_install_licence.get(0.0, tk.END),
+                                "COMMAND":entry_install_runcommand.get(),
                                 "SIZE_MO":os.path.getsize(executable_file) / 1048576
                             })
 
@@ -1433,6 +1453,8 @@ except Exception as e:
                             messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
                             print(traceback.format_exc())
                             return
+                    
+                    compile_ok = True
                 
                 except Exception as e:
                     window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
@@ -1605,6 +1627,9 @@ except Exception as e:
         texte_config = tk.Label(frame_config_compile, text=Trad.t004[language])
         texte_config.pack()
 
+        frame_config_installer = tk.Frame(frame_config_compile)
+        frame_config_installer.pack()
+
         frame_config_compile.pack()
 
         frame_compile = tk.LabelFrame(frame, text=Trad.t005[language])
@@ -1613,6 +1638,67 @@ except Exception as e:
         button_compile.pack()
 
         frame_compile.pack()
+
+        # install widget -------------------
+
+        frame_config_installer2 = None
+
+        entry_install_name = None
+        text_install_info = None
+        text_install_licence = None
+        entry_install_runcommand = None
+
+        install_config_mode = False
+
+        WIDTH_ENTRY = 25
+
+        def manage_config() -> None:
+            """Set the frame config"""
+            nonlocal frame_config_installer2, install_config_mode, entry_install_name, text_install_info, text_install_licence, entry_install_runcommand
+            if list_compiling.get() == text_type_of_compile["exeinstaller"]:
+                if not install_config_mode:
+                    install_config_mode = True
+                    frame_config_installer2 = tk.LabelFrame(frame_config_installer, text=Trad.t114[language])
+                    frame_config_installer2.pack()
+
+                    text_install_name = tk.Label(frame_config_installer2, text=Trad.t115[language])
+                    text_install_name.grid(column=0, row=0)
+
+                    entry_install_name = tk.Entry(frame_config_installer2, width=WIDTH_ENTRY)
+                    entry_install_name.grid(column=1, row=0)
+                    entry_install_name.insert(0, os.path.splitext(os.path.basename(file))[0])
+
+                    infall_info = tk.Label(frame_config_installer2, text=Trad.t116[language])
+                    infall_info.grid(column=0, row=1)
+
+                    text_install_info = tk.Text(frame_config_installer2, fg="#000000", font=("Arial", 8), width=WIDTH_ENTRY, height=2)
+                    text_install_info.grid(column=1, row=1)
+                    text_install_info.insert(0.0, "Information about application...")
+
+                    install_licence = tk.Label(frame_config_installer2, text=Trad.t117[language])
+                    install_licence.grid(column=0, row=2)
+
+                    text_install_licence = tk.Text(frame_config_installer2, fg="#000000", font=("Arial", 8), width=WIDTH_ENTRY, height=2)
+                    text_install_licence.grid(column=1, row=2)
+                    text_install_licence.insert(0.0, "Information about licence...")
+
+                    text_install_runcommand = tk.Label(frame_config_installer2, text=Trad.t118[language])
+                    text_install_runcommand.grid(column=0, row=3)
+
+                    entry_install_runcommand = tk.Entry(frame_config_installer2, width=WIDTH_ENTRY)
+                    entry_install_runcommand.grid(column=1, row=3)
+
+                
+
+            else:
+                if install_config_mode:
+                    frame_config_installer2.destroy()
+                    install_config_mode = False
+                
+
+            window_easy_compile.after(UPTATE_GUIT, manage_config)
+
+        manage_config()
     
     def configure_frame_Linux(frame: tk.Frame) -> None:
         """Make the frame of the compile for Linux."""
