@@ -692,15 +692,6 @@ Categories={};""",
     "AppRun":'''#!/bin/bash
 
 exec "$APPDIR/usr/bin/{}" "$@"''',
-
-    "Installinfo":'''{
-    "APP_NAME":"{}",
-    "EXECUTABLE_NAME":"{}",
-    "INFO":"{}",
-    "LICENCE":"{}",
-    "COMMAND":{},
-    "SIZE_MO":{}
-}''',
     "Installer":r'''# -*- coding: utf-8 -*-
 try:
     import tkinter as tk
@@ -1121,7 +1112,7 @@ def main() -> None:
             path = entry_path.get()
 
             if path:
-                global path_copy
+                nonlocal path_copy
                 path_copy = path
                 step_3()
             
@@ -1444,18 +1435,41 @@ except Exception as e:
 
                         executable_file = os.path.join(parent_dir, "dist", file_name)
 
-                        shutil.move(executable_file, file_name)
+                        
+                        install_info = str({
+                            "APP_NAME":"name",
+                            "EXECUTABLE_NAME":file_name,
+                            "INFO":"appinfo",
+                            "LICENCE":"licence",
+                            "COMMAND":"",
+                            "SIZE_MO":os.path.getsize(executable_file) / 1048576
+                        })
 
-                        pathlib.Path("install_info.txt").write_text(file_info["Installinfo"].format("name", file_name, "appinfo", "licence", str(os.path.getsize(file_name) / 1048576)))
+                        pathlib.Path("install_info.txt").write_text(install_info, encoding="UTF-8")
 
                         # ajouter image | ajouter zip
 
-                        pathlib.Path("installer.py").write_text(file_info["Installinfo"])
+                        if pathlib.Path("data").is_dir() :
+                            shutil.rmtree("data")
+                        
 
-                        subprocess.run(["pyinstaller", "--onefile", '--add-data ""'])
+                        os.mkdir("data")
+
+                        shutil.move(executable_file, os.path.join("data", file_name))
+
+                        shutil.make_archive(
+                            base_name="data",
+                            format="zip",
+                            root_dir="data"
+                        )
+
+                        pathlib.Path("installer.py").write_text(file_info["Installer"], encoding="UTF-8")
+
+                        subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "installer.py"], text=True, check=True)
 
                     except Exception as e:
                         messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
+                        print(traceback.format_exc())
                         return
                     
 
