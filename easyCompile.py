@@ -1344,134 +1344,124 @@ except Exception as e:
             compile_type = list_compiling.get()
 
             if os_name == "win32":
+            
+                disabeled_window(window_easy_compile, "disabled")
 
-                if compile_type == text_type_of_compile["exe"]:
-                    disabeled_window(window_easy_compile, "disabled")
+                frame_message = compile_message()
 
-                    frame_message = compile_message()
+                compile_ok = False
 
-                    compile_ok = False
+                window_easy_compile.update()
 
-                    window_easy_compile.update()
+                try:
+                    pyinstaller_env = None
 
-                    try:
-                        pyinstaller_env = None
+                    if getattr(sys, "frozen", False) or hasattr(sys, "_MEIPASS"):
+                        pyinstaller_env = os.environ.copy()
+                        pyinstaller_env.pop("TCL_LIBRARY", None)
+                        pyinstaller_env.pop("TK_LIBRARY", None)
 
-                        if getattr(sys, "frozen", False) or hasattr(sys, "_MEIPASS"):
-                            pyinstaller_env = os.environ.copy()
-                            pyinstaller_env.pop("TCL_LIBRARY", None)
-                            pyinstaller_env.pop("TK_LIBRARY", None)
-
-                        subprocess.run(
-                                ["pyinstaller", str(file), "--onefile"],
-                                text=True,
-                                check=True,
-                                env=pyinstaller_env,
-                            )
-                        
-                        window_easy_compile.update()
-                        
-                        compile_ok = True
-                    
-                    except Exception as e:
-                        window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
-
-                        window_easy_compile.update()
-                        compile_ok = False
-                    
-                    if compile_ok :
-                        window_end_compile = tk.Toplevel(window_easy_compile)
-                        window_end_compile.title(Trad.t025[language])
-
-                        text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
-
-                        frame_button_compile = tk.Frame(window_end_compile)
-
-                        button_save = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
-
-                        button_cancel = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
-
-
-                        frame_button_compile.pack()
-
-                        grab_set_and_wait_window(window_end_compile)
-
-                    try:
-                        frame_message.destroy()
-                    
-                        disabeled_window(window_easy_compile, "normal")
-                    except:
-                        pass
-
-                else:       # make installer
-                    try:
-                        pyinstaller_env = None
-
-                        if getattr(sys, "frozen", False) or hasattr(sys, "_MEIPASS"):
-                            pyinstaller_env = os.environ.copy()
-                            pyinstaller_env.pop("TCL_LIBRARY", None)
-                            pyinstaller_env.pop("TK_LIBRARY", None)
-
-                        subprocess.run(
+                    subprocess.run(
                             ["pyinstaller", str(file), "--onefile"],
                             text=True,
                             check=True,
                             env=pyinstaller_env,
                         )
-
-                        if importlib.util.find_spec("win32com.client") is None:
-                            install = messagebox.askquestion(Trad.t109[language], Trad.t110[language], detail=Trad.t111[language], icon="warning")
-
-                            if install == "yes":
-                                try:
-                                    subprocess.run(["python", "-m", "pip", "install", "pywin32"], check=True)
-                                except Exception as e:
-                                    messagebox.showerror(Trad.t112[language], Trad.t113[language], detail=Trad.t108[language].format(str(e)))
-                                    return
-                        
-                        source_file = os.path.abspath(file)
-                        parent_dir = os.path.dirname(source_file)
-                        file_name = os.path.splitext(os.path.basename(source_file))[0] + ".exe"
-
-                        executable_file = os.path.join(parent_dir, "dist", file_name)
-
-                        
-                        install_info = str({
-                            "APP_NAME":"name",
-                            "EXECUTABLE_NAME":file_name,
-                            "INFO":"appinfo",
-                            "LICENCE":"licence",
-                            "COMMAND":"",
-                            "SIZE_MO":os.path.getsize(executable_file) / 1048576
-                        })
-
-                        pathlib.Path("install_info.txt").write_text(install_info, encoding="UTF-8")
-
-                        # ajouter image | ajouter zip
-
-                        if pathlib.Path("data").is_dir() :
-                            shutil.rmtree("data")
-                        
-
-                        os.mkdir("data")
-
-                        shutil.move(executable_file, os.path.join("data", file_name))
-
-                        shutil.make_archive(
-                            base_name="data",
-                            format="zip",
-                            root_dir="data"
-                        )
-
-                        pathlib.Path("installer.py").write_text(file_info["Installer"], encoding="UTF-8")
-
-                        subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "installer.py"], text=True, check=True)
-
-                    except Exception as e:
-                        messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
-                        print(traceback.format_exc())
-                        return
                     
+                    window_easy_compile.update()
+                    
+                    compile_ok = True
+                
+                
+                
+                
+
+                    if compile_type == text_type_of_compile["exeinstaller"] :# make installer
+                        try:
+
+                            if importlib.util.find_spec("win32com.client") is None:
+                                install = messagebox.askquestion(Trad.t109[language], Trad.t110[language], detail=Trad.t111[language], icon="warning")
+
+                                if install == "yes":
+                                    try:
+                                        subprocess.run(["python", "-m", "pip", "install", "pywin32"], check=True)
+                                    except Exception as e:
+                                        messagebox.showerror(Trad.t112[language], Trad.t113[language], detail=Trad.t108[language].format(str(e)))
+                                        return
+                            
+                            source_file = os.path.abspath(file)
+                            parent_dir = os.path.dirname(source_file)
+                            file_name = os.path.splitext(os.path.basename(source_file))[0] + ".exe"
+
+                            executable_file = os.path.join(parent_dir, "dist", file_name)
+
+                            
+                            install_info = str({
+                                "APP_NAME":"name",
+                                "EXECUTABLE_NAME":file_name,
+                                "INFO":"appinfo",
+                                "LICENCE":"licence",
+                                "COMMAND":"",
+                                "SIZE_MO":os.path.getsize(executable_file) / 1048576
+                            })
+
+                            pathlib.Path("install_info.txt").write_text(install_info, encoding="UTF-8")
+
+                            # ajouter image | ajouter zip
+
+                            if pathlib.Path("data").is_dir() :
+                                shutil.rmtree("data")
+                            
+
+                            os.mkdir("data")
+
+                            shutil.move(executable_file, os.path.join("data", file_name))
+
+                            shutil.make_archive(
+                                base_name="data",
+                                format="zip",
+                                root_dir="data"
+                            )
+
+                            pathlib.Path("installer.py").write_text(file_info["Installer"], encoding="UTF-8")
+
+                            subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "installer.py"], text=True, check=True)
+
+                        except Exception as e:
+                            messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
+                            print(traceback.format_exc())
+                            return
+                
+                except Exception as e:
+                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
+
+                    window_easy_compile.update()
+                    compile_ok = False
+                
+                if compile_ok :
+                    window_end_compile = tk.Toplevel(window_easy_compile)
+                    window_end_compile.title(Trad.t025[language])
+
+                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+
+                    frame_button_compile = tk.Frame(window_end_compile)
+
+                    button_save = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+
+                    button_cancel = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+
+
+                    frame_button_compile.pack()
+
+                    grab_set_and_wait_window(window_end_compile)
+
+                try:
+                    frame_message.destroy()
+                
+                    disabeled_window(window_easy_compile, "normal")
+                except:
+                    pass
+                
 
             elif os_name == "linux":
                 if compile_type == text_type_of_compile["exe"]:
