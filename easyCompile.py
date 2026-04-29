@@ -1427,6 +1427,8 @@ except Exception as e:
 
                             subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "installer.py"], text=True, check=True)
 
+                            os.rename("dist\\installer.exe", "dist\\" + file_name)
+
                         except Exception as e:
                             messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
                             print(traceback.format_exc())
