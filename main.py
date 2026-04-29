@@ -52,9 +52,9 @@ if __name__ == "__main__":
     def open_script() -> None:
         """Open a file and open the window for compile"""
         file = filedialog.askopenfilename(
-                                        title=trad_001[language],
-                                        filetypes=[(trad_003[language], "*.py")]
-            )
+            title=trad_001[language],
+            filetypes=[(trad_003[language], "*.py")]
+        )
 
         
         if file != "":
