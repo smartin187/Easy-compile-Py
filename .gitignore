@@ -16,3 +16,8 @@ build/**
 teste.py
 
 Setting.txt
+
+*.zip
+*.exe
+install_info.txt
+installer.py
