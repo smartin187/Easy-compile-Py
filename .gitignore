@@ -21,3 +21,5 @@ Setting.txt
 *.exe
 install_info.txt
 installer.py
+
+data/
