@@ -19,6 +19,7 @@ Setting.txt
 
 *.zip
 *.exe
+*.png
 install_info.txt
 installer.py
 
