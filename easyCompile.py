@@ -645,6 +645,26 @@ def easyCompile(
             "en":"Command to run during installation:\n(leave empty to ignore)"
         }
 
+        t119 = {
+            "fr":"Ajouter des donner :\n(séléctionner un dossier)",
+            "en":"Add data:\n(select a folder)"
+        }
+
+        t120 = {
+            "fr":"Séléctionner un dossier où le contenu sera copier au même endroit que l'éxécutable.\nUtiliser les chemain relatif pour y accéder...",
+            "en":"Select a folder where the content will be copied in the same place as the executable.\nUse relative paths to access it..."
+        }
+
+        t121 = {
+            "fr":"Aide",
+            "en":"Help"
+        }
+
+        t122 = {
+            "fr":"Ouvrir le dossier",
+            "en":"Open directory"
+        }
+
 
     def get_debian_architecture() -> str:
         """Return the architecture"""
@@ -1416,6 +1436,13 @@ except Exception as e:
 
                             executable_file = os.path.join(parent_dir, "dist", file_name)
 
+                            if pathlib.Path("data").is_dir() :
+                                shutil.rmtree("data")
+
+                            data_path = str_path_data.get()
+
+                            shutil.copytree(data_path, "data")
+
                             install_info = str({
                                 "APP_NAME":entry_install_name.get(),
                                 "EXECUTABLE_NAME":file_name,
@@ -1428,12 +1455,6 @@ except Exception as e:
                             pathlib.Path("install_info.txt").write_text(install_info, encoding="UTF-8")
 
                             # ajouter image | ajouter zip
-
-                            if pathlib.Path("data").is_dir() :
-                                shutil.rmtree("data")
-                            
-
-                            os.mkdir("data")
 
                             shutil.move(executable_file, os.path.join("data", file_name))
 
@@ -1647,6 +1668,7 @@ except Exception as e:
         text_install_info = None
         text_install_licence = None
         entry_install_runcommand = None
+        str_path_data = None
 
         install_config_mode = False
 
@@ -1654,7 +1676,7 @@ except Exception as e:
 
         def manage_config() -> None:
             """Set the frame config"""
-            nonlocal frame_config_installer2, install_config_mode, entry_install_name, text_install_info, text_install_licence, entry_install_runcommand
+            nonlocal frame_config_installer2, install_config_mode, entry_install_name, text_install_info, text_install_licence, entry_install_runcommand, str_path_data
             if list_compiling.get() == text_type_of_compile["exeinstaller"]:
                 if not install_config_mode:
                     install_config_mode = True
@@ -1687,6 +1709,30 @@ except Exception as e:
 
                     entry_install_runcommand = tk.Entry(frame_config_installer2, width=WIDTH_ENTRY)
                     entry_install_runcommand.grid(column=1, row=3)
+
+                    frame_text_dir = tk.Frame(frame_config_installer2)
+                    frame_text_dir.grid(column=0, row=4)
+
+                    text_dir = tk.Label(frame_text_dir, text=Trad.t119[language])
+                    text_dir.grid(column=0, row=0)
+
+                    button_info = tk.Button(frame_text_dir, text="?", command=lambda: messagebox.showinfo(Trad.t121[language], Trad.t120[language]), font=("Arial", 8, "bold"), activebackground=BG, activeforeground=FG)
+                    button_info.grid(column=1, row=0)
+
+                    def select_dir() -> None:
+                        """The user select an directory for the data."""
+                        path = filedialog.askdirectory()
+                        if path:
+                            str_path_data.set(path)
+
+
+                    button_select_path = tk.Button(frame_config_installer2, text=Trad.t122[language], command=select_dir, activebackground=BG, activeforeground=FG)
+                    button_select_path.grid(column=1, row=4)
+
+                    str_path_data = tk.StringVar(frame_config_installer2, value="[no data]")
+
+                    text_path_data = tk.Label(frame_config_installer2, textvariable=str_path_data)
+                    text_path_data.grid(column=0, row=5, columnspan=2)
 
                 
 
