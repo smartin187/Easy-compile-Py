@@ -1456,7 +1456,10 @@ except Exception as e:
 
                             data_path = str_path_data.get()
 
-                            shutil.copytree(data_path, "data")
+                            if data_path != "[no data]":
+                                shutil.copytree(data_path, "data")
+                            else:
+                                os.mkdir("data")
 
                             install_info = str({
                                 "APP_NAME":entry_install_name.get(),
@@ -1483,9 +1486,13 @@ except Exception as e:
 
                             path_image = str_path_image.get()
 
-                            shutil.copy(path_image, "icon.png")
+                            pyinstaller_arg = ["pyinstaller", "installer.py", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;."]
 
-                            subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "--add-data=icon.png;.", "installer.py"], text=True, check=True)
+                            if path_image != "[no data]":
+                                shutil.copy(path_image, "icon.png")
+                                pyinstaller_arg.append("--add-data=icon.png;.")
+
+                            subprocess.run(pyinstaller_arg, text=True, check=True)
 
                             os.rename("dist\\installer.exe", "dist\\" + file_name)
 
