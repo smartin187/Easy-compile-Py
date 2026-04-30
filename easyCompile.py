@@ -665,6 +665,21 @@ def easyCompile(
             "en":"Open directory"
         }
 
+        t123 = {
+            "fr":"Icon de l'installateur",
+            "en":"Installer icon"
+        }
+
+        t124 = {
+            "fr":"Séléctionner une image",
+            "en":"Select an image"
+        }
+
+        t125 = {
+            "fr":"Séléctionner une image au format png.\nRecomandation : utiliser une image de 125x125 px.",
+            "en":"Select an image in png format.\nRecommendation: use a 125x125 px image."
+        }
+
 
     def get_debian_architecture() -> str:
         """Return the architecture"""
@@ -1466,7 +1481,11 @@ except Exception as e:
 
                             pathlib.Path("installer.py").write_text(file_info["Installer"], encoding="UTF-8")
 
-                            subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "installer.py"], text=True, check=True)
+                            path_image = str_path_image.get()
+
+                            shutil.copy(path_image, "icon.png")
+
+                            subprocess.run(["pyinstaller", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;.", "--add-data=icon.png;.", "installer.py"], text=True, check=True)
 
                             os.rename("dist\\installer.exe", "dist\\" + file_name)
 
@@ -1669,6 +1688,7 @@ except Exception as e:
         text_install_licence = None
         entry_install_runcommand = None
         str_path_data = None
+        str_path_image = None
 
         install_config_mode = False
 
@@ -1676,7 +1696,7 @@ except Exception as e:
 
         def manage_config() -> None:
             """Set the frame config"""
-            nonlocal frame_config_installer2, install_config_mode, entry_install_name, text_install_info, text_install_licence, entry_install_runcommand, str_path_data
+            nonlocal frame_config_installer2, install_config_mode, entry_install_name, text_install_info, text_install_licence, entry_install_runcommand, str_path_data, str_path_image
             if list_compiling.get() == text_type_of_compile["exeinstaller"]:
                 if not install_config_mode:
                     install_config_mode = True
@@ -1731,8 +1751,30 @@ except Exception as e:
 
                     str_path_data = tk.StringVar(frame_config_installer2, value="[no data]")
 
-                    text_path_data = tk.Label(frame_config_installer2, textvariable=str_path_data)
+                    text_path_data = tk.Label(frame_config_installer2, textvariable=str_path_data, font=("Arial", 8), state="disabled")
                     text_path_data.grid(column=0, row=5, columnspan=2)
+
+
+                    text_image = tk.Label(frame_config_installer2, text=Trad.t123[language])
+                    text_image.grid(column=0, row=6)
+
+
+                    def select_image() -> None:
+                        """The user select an image for the installer."""
+                        messagebox.showinfo(Trad.t123[language], Trad.t125[language])
+
+                        path = filedialog.askopenfilename(filetypes=[("Portable Network Graphics", "*.png")], defaultextension="*.png")
+                        if path:
+                            str_path_image.set(path)
+
+
+                    button_select_path_image = tk.Button(frame_config_installer2, text=Trad.t124[language], command=select_image, activebackground=BG, activeforeground=FG)
+                    button_select_path_image.grid(column=1, row=6)
+
+                    str_path_image = tk.StringVar(frame_config_installer2, value="[no data]")
+
+                    text_path_image = tk.Label(frame_config_installer2, textvariable=str_path_image, font=("Arial", 8), state="disabled")
+                    text_path_image.grid(column=0, row=7, columnspan=2)
 
                 
 
