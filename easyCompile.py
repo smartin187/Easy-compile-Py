@@ -690,6 +690,16 @@ def easyCompile(
             "en":"Unable to remove temporary files..."
         }
 
+        t128 = {
+            "fr":"La librairie pywin32 est néssessaire pour crée l'instalateur.\nPour l'installer, écriver dans un terminale de Wine :\npip install pywin32\n",
+            "en":"The pywin32 library is necessary to create the installer.\nFor install if, set on a terminal of Wine:\npip install pywin32\n"
+        }
+
+        t129 = {
+            "fr":"Impossible d'installer pywin32 dans Wine. Esseyer l'instalation manuelle...\nVérifier que Python et pip sont bien installer dans Wine...",
+            "en":"Unable to install pywin32 one Wine. Try the manual installation...\nCheck that Python and pip are installed one Wine..."
+        }
+
 
     def get_debian_architecture() -> str:
         """Return the architecture"""
@@ -1583,129 +1593,223 @@ except Exception as e:
                 
 
             elif os_name == "linux":
-                if compile_type == text_type_of_compile["exe"]:
-                    messagebox.showinfo(title=Trad.t067[language], message=Trad.t068[language], detail=Trad.t069[language])
-                    try:
-                        result = subprocess.run(["wine", "--version"], capture_output=True, text=True)
-                    except:
-                        class result_error:
-                            returncode = 1
-                        result = result_error()
+                messagebox.showinfo(title=Trad.t067[language], message=Trad.t068[language], detail=Trad.t069[language])
+                try:
+                    result = subprocess.run(["wine", "--version"], capture_output=True, text=True)
+                except:
+                    class result_error:
+                        returncode = 1
+                    result = result_error()
 
-                    if result.returncode != 0:
-                        install_wine = messagebox.askyesno(title=Trad.t070[language], message=Trad.t071[language], detail=Trad.t072[language])
+                if result.returncode != 0:
+                    install_wine = messagebox.askyesno(title=Trad.t070[language], message=Trad.t071[language], detail=Trad.t072[language])
 
-                        if install_wine:
-                            automatique_install = messagebox.askyesno(title=Trad.t073[language], message=Trad.t074[language])
+                    if install_wine:
+                        automatique_install = messagebox.askyesno(title=Trad.t073[language], message=Trad.t074[language])
 
-                            if automatique_install:
-                                try:
-                                    subprocess.run(
-                                        ["sudo", "apt", "install", "wine"],
-                                        capture_output=True,
-                                        text=True,
-                                        check=True,
-                                    )
-                                    subprocess.run(
-                                        ["winecfg"],
-                                        capture_output=True,
-                                        text=True,
-                                        check=True,
-                                    )
-                                    
-                                except Exception as e:
-                                    messagebox.showerror(title=Trad.t075[language], message=Trad.t076[language], detail=str(e))
-                                    window_easy_compile.destroy()
-                                    return
-                                else:
-                                    messagebox.showinfo(title=Trad.t073[language], message=Trad.t077[language])
-                                    window_easy_compile.destroy()
-                                    return
-                            else:
-                                window_manual_install_wine = tk.Toplevel()
-                                window_manual_install_wine.title(Trad.t078[language])
-
-                                text_info = tk.Label(window_manual_install_wine, text=Trad.t079[language]).pack()
-
-                                step = [
-                                    Trad.t080[language],
-                                    Trad.t081[language],
-                                    Trad.t082[language]
-                                ]
-
+                        if automatique_install:
+                            try:
+                                subprocess.run(
+                                    ["sudo", "apt", "install", "wine"],
+                                    capture_output=True,
+                                    text=True,
+                                    check=True,
+                                )
+                                subprocess.run(
+                                    ["winecfg"],
+                                    capture_output=True,
+                                    text=True,
+                                    check=True,
+                                )
                                 
-
-                                for i in range(1, 4):
-                                    frame_tmp = tk.LabelFrame(window_manual_install_wine, text=Trad.t083[language].format(str(i)))
-                                    text_tmp = tk.Label(frame_tmp, text=step[i-1]).pack()
-                                    frame_tmp.pack()
-
-                                button_close_guide = tk.Button(window_manual_install_wine, activebackground=BG, activeforeground=FG, text=Trad.t084[language], command=window_manual_install_wine.destroy).pack()
-
-                                grab_set_and_wait_window(window_manual_install_wine)
-
+                            except Exception as e:
+                                messagebox.showerror(title=Trad.t075[language], message=Trad.t076[language], detail=str(e))
                                 window_easy_compile.destroy()
                                 return
-
-
+                            else:
+                                messagebox.showinfo(title=Trad.t073[language], message=Trad.t077[language])
+                                window_easy_compile.destroy()
+                                return
                         else:
+                            window_manual_install_wine = tk.Toplevel()
+                            window_manual_install_wine.title(Trad.t078[language])
+
+                            text_info = tk.Label(window_manual_install_wine, text=Trad.t079[language]).pack()
+
+                            step = [
+                                Trad.t080[language],
+                                Trad.t081[language],
+                                Trad.t082[language]
+                            ]
+
+                            
+
+                            for i in range(1, 4):
+                                frame_tmp = tk.LabelFrame(window_manual_install_wine, text=Trad.t083[language].format(str(i)))
+                                text_tmp = tk.Label(frame_tmp, text=step[i-1]).pack()
+                                frame_tmp.pack()
+
+                            button_close_guide = tk.Button(window_manual_install_wine, activebackground=BG, activeforeground=FG, text=Trad.t084[language], command=window_manual_install_wine.destroy).pack()
+
+                            grab_set_and_wait_window(window_manual_install_wine)
+
                             window_easy_compile.destroy()
                             return
 
+
+                    else:
+                        window_easy_compile.destroy()
+                        return
+
+                
                     
-                        
 
 
-                    disabeled_window(window_easy_compile, "disabled")
+                disabeled_window(window_easy_compile, "disabled")
 
-                    frame_message = compile_message()
+                frame_message = compile_message()
 
-                    compile_ok = False
+                compile_ok = False
 
+                window_easy_compile.update()
+
+                try:
+                    subprocess.run(
+                            ["wine", "pyinstaller", str(file), "--onefile"],
+                            text=True,
+                            check=True,
+                        )
+                    
                     window_easy_compile.update()
 
-                    try:
-                        subprocess.run(
-                                ["wine", "pyinstaller", str(file), "--onefile"],
-                                text=True,
-                                check=True,
+                    if text_type_of_compile["exeinstaller"] == compile_type:  # make an installer
+                        try:
+                            try:
+                                subprocess.run(["wine", "python", "-c", "import win32com.client"], check=True)
+                            except:
+                                win_lib_install = False
+                            else:
+                                win_lib_install = True
+
+                            if not win_lib_install:
+                                install = messagebox.askquestion(Trad.t109[language], Trad.t128[language], detail=Trad.t111[language], icon="warning")
+
+                                if install == "yes":
+                                    try:
+                                        subprocess.run(["wine", "python", "-m", "pip", "install", "pywin32"], check=True)
+                                    except Exception as e:
+                                        messagebox.showerror(Trad.t112[language], Trad.t129[language], detail=Trad.t108[language].format(str(e)))
+                                        return
+                            
+                            
+                            
+                            source_file = os.path.abspath(file)
+                            parent_dir = os.path.dirname(source_file)
+                            file_name = os.path.splitext(os.path.basename(source_file))[0] + ".exe"
+
+                            executable_file = os.path.join(parent_dir, "dist", file_name)
+
+                            if pathlib.Path("data").is_dir() :
+                                shutil.rmtree("data")
+
+                            data_path = str_path_data.get()
+
+                            if data_path != "[no data]":
+                                shutil.copytree(data_path, "data")
+                            else:
+                                os.mkdir("data")
+
+                            install_info = str({
+                                "APP_NAME":entry_install_name.get(),
+                                "EXECUTABLE_NAME":file_name,
+                                "INFO":text_install_info.get(0.0, tk.END),
+                                "LICENCE":text_install_licence.get(0.0, tk.END),
+                                "COMMAND":entry_install_runcommand.get(),
+                                "SIZE_MO":os.path.getsize(executable_file) / 1048576
+                            })
+
+                            pathlib.Path("install_info.txt").write_text(install_info, encoding="UTF-8")
+
+                            # ajouter image | ajouter zip
+
+                            shutil.move(executable_file, os.path.join("data", file_name))
+
+                            shutil.make_archive(
+                                base_name="data",
+                                format="zip",
+                                root_dir="data"
                             )
-                        
-                        window_easy_compile.update()
-                        
-                        compile_ok = True
+
+                            pathlib.Path("installer.py").write_text(file_info["Installer"], encoding="UTF-8")
+
+                            path_image = str_path_image.get()
+
+                            pyinstaller_arg = ["wine", "pyinstaller", "installer.py", "--onefile", "--add-data=data.zip;.", "--add-data=install_info.txt;."]
+
+                            if path_image != "[no data]":
+                                shutil.copy(path_image, "icon.png")
+                                pyinstaller_arg.append("--add-data=icon.png;.")
+
+                            subprocess.run(pyinstaller_arg, text=True, check=True)
+
+                            os.rename("dist\\installer.exe", "dist\\" + file_name)
+
+                        except Exception as e:
+                            messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
+                            print(traceback.format_exc())
+                            return
+
+                        finally:
+                            try:
+                                # clean :
+                                
+                                shutil.rmtree("data")
+                                os.remove("install_info.txt")
+                                os.remove("installer.py")
+                                os.remove("data.zip")
+
+                                if os.path.isfile("icon.png"):
+                                    os.remove("icon.png")
+                                
+                                os.remove("installer.spec")
+
+                            except Exception as e:
+                                messagebox.showerror(Trad.t126[language], Trad.t127[language], detail=Trad.t108[language].format(str(e)))
                     
-                    except Exception as e:
-                        window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
-
-                        window_easy_compile.update()
-                        compile_ok = False
                     
-                    if compile_ok :
-                        window_end_compile = tk.Toplevel(window_easy_compile)
-                        window_end_compile.title(Trad.t025[language])
+                    compile_ok = True
+                
+                except Exception as e:
+                    window_error(window_easy_compile, Trad.t008[language], Trad.t009[language], str(e))
 
-                        text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
+                    window_easy_compile.update()
+                    compile_ok = False
+                
+                if compile_ok :
+                    window_end_compile = tk.Toplevel(window_easy_compile)
+                    window_end_compile.title(Trad.t025[language])
 
-                        frame_button_compile = tk.Frame(window_end_compile)
+                    text_info = tk.Label(window_end_compile, text=Trad.t026[language]).pack()
 
-                        button_save = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+                    frame_button_compile = tk.Frame(window_end_compile)
 
-                        button_cancel = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
+                    button_save = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t027[language], command=save_compile).grid(column=0, row=0)
+
+                    button_cancel = tk.Button(frame_button_compile, activebackground=BG, activeforeground=FG, text=Trad.t028[language], command=window_easy_compile.destroy).grid(column=1, row=0)
 
 
-                        frame_button_compile.pack()
+                    frame_button_compile.pack()
 
-                        grab_set_and_wait_window(window_end_compile)
+                    grab_set_and_wait_window(window_end_compile)
 
-                        clean_build()
+                    clean_build()
 
-                    try:
-                        frame_message.destroy()
-                    
-                        disabeled_window(window_easy_compile, "normal")
-                    except:
-                        pass
+                try:
+                    frame_message.destroy()
+                
+                    disabeled_window(window_easy_compile, "normal")
+                except:
+                    pass
 
 
         frame_type_compiling = tk.LabelFrame(frame, text=Trad.t002[language])
