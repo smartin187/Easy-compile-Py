@@ -1324,6 +1324,20 @@ try:
 except Exception as e:
     messagebox.showerror("Error", "Fatal error during the instalation.", detail=f"Detail: {str(e)}")'''
     }
+
+    def clean_build() -> None:
+        """Clean the file and directory make by pyinstaller (dist, build, *.spec)"""
+        try:
+            shutil.rmtree("dist" if os_name == "win32" else "./dist")
+
+            shutil.rmtree("build" if os_name == "win32" else "./build")
+
+            file_name = os.path.splitext(os.path.basename(file))[0] + ".spec"
+
+            os.remove(file_name if os_name == "win32" else "./" + file_name)
+        
+        except Exception as e:
+            messagebox.showerror(Trad.t126[language], Trad.t127[language], detail=Trad.t108[language].format(str(e)))
     
     def save_compile(extention_compile_save: str = ".exe") -> None:
         """Save the compile (copy the executable)"""
@@ -1522,6 +1536,8 @@ except Exception as e:
 
                                 if os.path.isfile("icon.png"):
                                     os.remove("icon.png")
+                                
+                                os.remove("installer.spec")
 
                             except Exception as e:
                                 messagebox.showerror(Trad.t126[language], Trad.t127[language], detail=Trad.t108[language].format(str(e)))
@@ -1550,6 +1566,8 @@ except Exception as e:
                     frame_button_compile.pack()
 
                     grab_set_and_wait_window(window_end_compile)
+
+                    clean_build()
 
                 try:
                     frame_message.destroy()
@@ -1674,6 +1692,8 @@ except Exception as e:
                         frame_button_compile.pack()
 
                         grab_set_and_wait_window(window_end_compile)
+
+                        clean_build()
 
                     try:
                         frame_message.destroy()
@@ -2014,6 +2034,8 @@ except Exception as e:
 
                     grab_set_and_wait_window(window_end_compile)
 
+                    clean_build()
+
                 try:
                     frame_message.destroy()
                 
@@ -2312,6 +2334,8 @@ except Exception as e:
                     frame_button_compile.pack()
 
                     grab_set_and_wait_window(window_end_compile)
+
+                    clean_build()
 
                 try:
                     frame_message.destroy()
