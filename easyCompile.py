@@ -680,6 +680,16 @@ def easyCompile(
             "en":"Select an image in png format.\nRecommendation: use a 125x125 px image."
         }
 
+        t126 = {
+            "fr":"Erreur de netoyage",
+            "en":"Cleaning error"
+        }
+
+        t127 = {
+            "fr":"Impossible de supprimer les fichier temporaire...",
+            "en":"Unable to remove temporary files..."
+        }
+
 
     def get_debian_architecture() -> str:
         """Return the architecture"""
@@ -1500,6 +1510,21 @@ except Exception as e:
                             messagebox.showerror(Trad.t106[language], Trad.t107[language], detail=Trad.t108[language].format(e))
                             print(traceback.format_exc())
                             return
+
+                        finally:
+                            try:
+                                # clean :
+                                
+                                shutil.rmtree("data")
+                                os.remove("install_info.txt")
+                                os.remove("installer.py")
+                                os.remove("data.zip")
+
+                                if os.path.isfile("icon.png"):
+                                    os.remove("icon.png")
+
+                            except Exception as e:
+                                messagebox.showerror(Trad.t126[language], Trad.t127[language], detail=Trad.t108[language].format(str(e)))
                     
                     compile_ok = True
                 
