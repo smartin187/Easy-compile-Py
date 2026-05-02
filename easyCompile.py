@@ -5,7 +5,7 @@ This module have the fonction "easyCompile", for easy compile Python.
 """
 
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk, filedialog, messagebox, scrolledtext
 
 from urllib import request
 import importlib.util
@@ -25,7 +25,19 @@ from typing import Dict, Optional, Union
 
 os_name = sys.platform
 
+EASY_COMPILE_LICENCE = """Copyright (c) 2026 smartin178
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License."""
 
 def easyCompile(
     file: str,
@@ -698,6 +710,41 @@ def easyCompile(
         t129 = {
             "fr":"Impossible d'installer pywin32 dans Wine. Esseyer l'instalation manuelle...\nVérifier que Python et pip sont bien installer dans Wine...",
             "en":"Unable to install pywin32 one Wine. Try the manual installation...\nCheck that Python and pip are installed one Wine..."
+        }
+
+        t130 = {
+            "fr":"A propos",
+            "en":"About Easy Compile"
+        }
+
+        t131 = {
+            "fr":"Easy Compile est un outil vous permettant de compiller des script Python.\nUtilisation de Pyinstaller, et d'autre outil : Wine, WSL, dpkg, AppimageTool.\n",
+            "en":"Easy Compile is a tool that allows you to compile Python scripts.\nUsing Pyinstaller, and other tools: Wine, WSL, dpkg, AppimageTool.\n"
+        }
+
+        t132 = {
+            "fr":"Outil utiliser",
+            "en":"Used tool"
+        }
+
+        t133 = {
+            "fr":"Wine",
+            "en":"Wine"
+        }
+
+        t134 = {
+            "fr":"PyInstaller",
+            "en":"PyInstaller"
+        }
+
+        t135 = {
+            "fr":"Appimage Tool",
+            "en":"Appimage Tool"
+        }
+
+        t136 = {
+            "fr":"dpkg (Debian)",
+            "en":"dpkg (Debian)"
         }
 
 
@@ -2831,6 +2878,45 @@ except Exception as e:
     configure_frame_Linux(frame_compile_Linux)
     
     window_easy_compile.geometry("300x300")
+
+    window_menu = tk.Menu(window_easy_compile)
+
+    window_easy_compile.configure(menu=window_menu)
+
+    def about_easycompile() -> None:
+        """Open a windows for information about easy compile."""
+        about_window = tk.Toplevel(window_easy_compile)
+        about_window.title(Trad.t130[language])
+
+        text_info = tk.Label(about_window, text=Trad.t131[language])
+        text_info.pack()
+
+
+        text_licence = scrolledtext.ScrolledText(about_window, height=5, width=50)
+        text_licence.insert(0.0, EASY_COMPILE_LICENCE)
+        text_licence.pack()
+        text_licence["state"] = "disabled"
+
+        frame_tool = tk.LabelFrame(about_window, text=Trad.t132[language])
+        frame_tool.pack()
+
+        button_wine = tk.Button(frame_tool, text=Trad.t133[language], command=lambda: webbrowser.open("https://www.winehq.org/"))
+        button_wine.grid(column=0, row=0)
+
+        button_pyinstaller = tk.Button(frame_tool, text=Trad.t134[language], command=lambda: webbrowser.open("https://pyinstaller.org/en/stable/"))
+        button_pyinstaller.grid(column=1, row=0)
+
+        button_appimagetool = tk.Button(frame_tool, text=Trad.t135[language], command=lambda: webbrowser.open("https://appimage.github.io/appimagetool/"))
+        button_appimagetool.grid(column=2, row=0)
+
+
+        button_dpkg = tk.Button(frame_tool, text=Trad.t136[language], command=lambda: webbrowser.open("https://www.dpkg.org/"))
+        button_dpkg.grid(column=3, row=0)
+
+
+        grab_set_and_wait_window(about_window)
+
+    window_menu.add_command(label=Trad.t130[language], command=about_easycompile)
 
     # controle de Pyinstaller :
     try:
